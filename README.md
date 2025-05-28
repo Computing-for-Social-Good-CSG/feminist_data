@@ -10,7 +10,7 @@ There are several items that may be useful to researchers thinking about bias re
 2. Dataset of NLP Research Papers
    - In our research, we aggregated a datasets of the titles, abstracts, and metadata from ten years worth of research papers the leading NLP journal.
    - We do not make our scored sample generated using the Feminist Datacodebook available due to ethical considerations. 
-   - More information on the dataset can be found [here](## Dataset of NLP Research Papers).
+   - More information on the dataset can be found [here](#dataset-of-nlp-research-papers).
 3. Code for the Bias Reporting Tool.
    - The tool is built using the Typeform API (more implementation information to come).
    - We make the code available for two reasons: so that users of the tool have transparency on how the reports are generated, and so that others can fork or contribute to the tool. If you do fork our code, we ask you cite our repository as per the MIT License.
