@@ -89,10 +89,9 @@ function clickSubmit(buttonParent) {
     if(currentAccordion+1 < accordionList.length) {
 
         // open the next accordion element
-        // TODO, fix issue where it closes the next element if it is open
         currentAccordion++;
         var nextCollapsable = new bootstrap.Collapse(accordionList[currentAccordion], {
-            toggle: true
+            toggle: false
         })
         nextCollapsable.show();
     }
