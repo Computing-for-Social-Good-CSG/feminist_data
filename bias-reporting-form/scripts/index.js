@@ -69,7 +69,6 @@ function clickSubmit(buttonParent) {
     // check that there is a selection
     if(utils.formEmpty(buttonParent)){
         //TODO No option was selected in this form, display some warning and do not continue
-        console.log("Empty Form, you must select one option to continue");
         return;
     }
 
@@ -98,5 +97,6 @@ function clickSubmit(buttonParent) {
 }
 
 // Just a test, can place wherever
-utils.populateCheckboxAccordion("checkboxContainer1", "Language", "../data/data.json");
-utils.populateCheckboxAccordion("checkboxContainer2", "Country", "../data/data.json");
+utils.populateCheckboxAccordion("inputDataSource", "Data Sources", "../data/data.json", "radio", "dataSource");
+utils.populateCheckboxAccordion("checkboxContainer1", "Language", "../data/data.json", "checkbox");
+utils.populateCheckboxAccordion("checkboxContainer2", "Country", "../data/data.json", "checkbox");

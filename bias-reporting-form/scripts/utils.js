@@ -11,6 +11,8 @@ export function formEmpty(accordionParent){
         return false;
     }
     for (var i = 0; i < radios.length; i++) {
+        console.log("THERE ARE RADIOS");
+
         if(radios[i].checked) {
             return false;
         }
@@ -48,20 +50,20 @@ export function pullData(key, jsonPath){
 }
 
 // Populate an accordion with check boxes given key, json, and accordion to target
-export function populateCheckboxAccordion(containerId, key, jsonPath,) {
+export function populateCheckboxAccordion(containerId, key, jsonPath, inputType) {
     // Util call to parse json
     var checkBoxStrings = pullData(key, jsonPath);
 
     // For each entry, create an element
     for (var i=0; i<checkBoxStrings.length; i++)
     {
-        checkboxFactory(checkBoxStrings[i], containerId);
+        checkboxFactory(checkBoxStrings[i], containerId, inputType);
     }
 }
 
 
 // Checkbox creator
-export function checkboxFactory(description, containerId){
+export function checkboxFactory(description, containerId, inputType, inputName){
 
     var container = document.getElementById(containerId);
     var formCheck = document.createElement("div")
@@ -71,12 +73,19 @@ export function checkboxFactory(description, containerId){
     var label = document.createElement('label');
     label.classList.add("form-check-label");
 
-    checkBox.type="checkbox";
-    checkBox.value=description;
+    checkBox.type = inputType;
+    checkBox.value = description;
+    checkBox.id = description;
+    label.setAttribute("for", description);
+
+    // if it's a radio button, set the name attribute 
+    if (inputType == "radio") {
+        checkBox.name = inputName;
+    }
+
 
     label.appendChild(document.createTextNode(description));
-
-    container.appendChild(formCheck)
+    container.appendChild(formCheck);
     formCheck.appendChild(checkBox);
     formCheck.appendChild(label);
 }
