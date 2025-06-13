@@ -86,10 +86,10 @@ function clickSubmit(buttonParent) {
     currentCollapsable.hide();
 
     // If there is a next section
-    // TODO & ELEMENT INSIDE IS NOT ALREADY SELECTED?
     if(currentAccordion+1 < accordionList.length) {
 
         // open the next accordion element
+        // TODO, fix issue where it closes the next element if it is open
         currentAccordion++;
         var nextCollapsable = new bootstrap.Collapse(accordionList[currentAccordion], {
             toggle: true
@@ -97,3 +97,7 @@ function clickSubmit(buttonParent) {
         nextCollapsable.show();
     }
 }
+
+// Just a test, can place wherever
+utils.populateCheckboxAccordion("checkboxContainer1", "Language", "../data/data.json");
+utils.populateCheckboxAccordion("checkboxContainer2", "Country", "../data/data.json");
