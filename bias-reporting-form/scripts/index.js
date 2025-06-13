@@ -2,6 +2,7 @@ import * as utils from './utils.js';
 
 // Global Variables
 var currentAccordion = 0; 
+const dataSourceArr = utils.pullData("Data Sources", "../data/data.json");
 
 class Dataset {
     constructor () {
@@ -47,14 +48,12 @@ class Dataset {
 
 const d = new Dataset;
 
-// Not necessary when scripts are loaded as modules
-// document.addEventListener("DOMContentLoaded", function() {
-// });
-
 // Add submit function to all buttons
 // NOTE: I think buttons may be type "submit" in the future, when sending the radio values
 document.addEventListener("click", function(event){
     if(event.target.name == "sourceSubmit"){
+        console.log(event.target.name);
+
         clickSubmit(event.target.parentElement);
     }
 });
@@ -96,7 +95,10 @@ function clickSubmit(buttonParent) {
     }
 }
 
-// Just a test, can place wherever
-utils.populateCheckboxAccordion("inputDataSource", "Data Sources", "../data/data.json", "radio", "dataSource");
-utils.populateCheckboxAccordion("checkboxContainer1", "Language", "../data/data.json", "checkbox");
-utils.populateCheckboxAccordion("checkboxContainer2", "Country", "../data/data.json", "checkbox");
+// Populate initial form options
+utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
+
+const langArr = utils.pullData("Language", "../data/data.json");
+utils.populateInputGroup("checkboxContainer1", langArr, "checkbox");
+const countryArr = utils.pullData("Country", "../data/data.json");
+utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");

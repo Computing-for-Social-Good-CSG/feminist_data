@@ -1,19 +1,25 @@
 {
-    "Data Sources" : [
-      "Books",
-      "Common Crawl",
-      "Film transcripts",
-      "GoodReads",
-      "IMDB",
-      "News Media",
-      "Reddit",
-      "School or other curricula",
-      "UN transcripts",
-      "Web scraping (other than Common Crawl)",
-      "Wikipedia",
-      "YELP",
-      "YouTube"  
-    ],
+    "Data Sources" : {
+      "Books": {
+        "gender": "unknown"
+      },
+      "Common Crawl": {},
+      "Film transcripts": {},
+      "GoodReads": {},
+      "IMDB": {},
+      "News Media": {},
+      "Reddit": { 
+        "gender":"70% male", 
+        "gender_cit":"",
+        "gender_link":""
+      },
+      "School or other curricula": {},
+      "UN transcripts": {},
+      "Web scraping (other than Common Crawl)": {},
+      "Wikipedia": {},
+      "YELP": {},
+      "YouTube": {}  
+    },
     "Language": ["English", "Spanish", "Japanese"],
     "Country": ["Spain","Australia","Monaco"]
 }
