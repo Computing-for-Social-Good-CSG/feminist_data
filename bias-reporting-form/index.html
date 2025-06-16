@@ -29,6 +29,40 @@
 						<div class="accordion-body">
 							<p class="help-text">Only one item is selectable. If your data come from more than one source, we recommend filling out multiple forms.</p>
 							<div id="inputDataSource"></div>
+							<form class="form-inline">
+								<div class="form-group" style="display: block;">
+									<label for="startDateGen">Data Generation, earliest date:</label>
+						            <input id="startDateGen" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            	<label class="checkbox-inline">
+									</label>
+							        <input type="checkbox" id="startDateGenEst" value="false"> Estimated
+						       	</div>
+
+						       	<div class="form-group" style="display: block;">
+						       		<label for="endDateGen">Data Generation, latest date:</label>
+						            <input id="endDateGen" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            	<label class="checkbox-inline">
+									</label>
+							        <input type="checkbox" id="endDateGenEst" value="false"> Estimated
+						       	</div>
+
+						       	<div class="form-group" style="display: block;">
+						        	<label for="startDateCol">Data Collection, earliest date:</label>
+						            <input id="startDateCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            	<label class="checkbox-inline">
+									</label>
+									<input type="checkbox" id="startDateColEst" value="false"> Estimated
+						       	</div>
+
+						       	<div class="form-group" style="display: block;">
+						       		<label for="endDateCol">Data Collection, latest date:</label>
+						            <input id="endDateCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            	<label class="checkbox-inline">
+									</label>
+							        <input type="checkbox" id="endDateColEst" value="false"> Estimated
+						       	</div>
+
+					        </form>
 							<button class="btn btn-secondary" type="button" name="sourceSubmit">Submit</button>
 						</div>
 					</div>

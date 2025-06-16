@@ -44,6 +44,22 @@ class Dataset {
         </body>
         `);
     }
+
+    set(varString, value) {
+        if(varString != "" && varString != null && value != null && value != "") {
+            this[varString] = value;
+            return true;
+        }
+
+        if (typeof value == "boolean" && value == this[varString])
+        {
+            console.log("Value unchanged, ["+varString+":"+value+"], no action taken");
+            return true;
+        }
+
+        console.log("Empty parameter found when setting database variable ["+varString+":"+value+"]");
+        return false;
+    }
 }
 
 const d = new Dataset;
@@ -92,6 +108,22 @@ function clickSubmit(buttonParent) {
             toggle: false
         })
         nextCollapsable.show();
+    }
+
+    // On submit, modify the database with date variables
+        // null checks built in to database class using set function
+        // does not check for other garbage values before overwriting
+    if(d.set('gen_date_start', document.getElementById('startDateGen').value)) {
+        d.set('gen_date_start_est', document.getElementById('startDateGenEst').checked);
+    }
+    if (d.set('gen_date_end', document.getElementById('endDateGen').value)) {
+        d.set('gen_date_end_est', document.getElementById('endDateGenEst').checked);
+    }
+    if (d.set('collect_date_start', document.getElementById('startDateCol').value)) {
+        d.set('collect_date_start_est', document.getElementById('startDateColEst').checked);
+    }
+    if (d.set('collect_date_end', document.getElementById('endDateCol').value)) {
+        d.set('collect_date_end_est', document.getElementById('endDateColEst').checked);
     }
 }
 
