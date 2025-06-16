@@ -2,8 +2,9 @@ import * as utils from './utils.js';
 
 // Global Variables
 var currentAccordion = 0; 
-var dataSourceArr = utils.pullData("Data Sources", "../data/data.json");
+var dataSourceArr = utils.pullData("Data Sources", "../data/data_sources.json");
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
+var langArr = utils.pullData("Languages", "../data/languages.json");
 
 class Dataset {
     constructor () {
@@ -83,11 +84,10 @@ function clickSubmit(buttonParent) {
 
 // Populate initial form options
 utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
+utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 
-// const langArr = utils.pullData("Language", "../data/data.json");
-
-const countryArr = utils.pullData("Country", "../data/data.json");
-utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
+// const countryArr = utils.pullData("Country", "../data/data.json");
+// utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
 
 // When Data Source is submitted, populate suggested biases 
 document.getElementById("sourceSubmit").addEventListener("click", function(){
