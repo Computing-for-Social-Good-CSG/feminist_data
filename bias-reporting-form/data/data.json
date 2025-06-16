@@ -1,24 +1,30 @@
 {
-    "Data Sources" : {
-      "Books": {
-        "gender": "unknown"
+    "Data Sources":{
+      "Books":{
+        "gender":"unknown"
       },
-      "Common Crawl": {},
-      "Film transcripts": {},
-      "GoodReads": {},
-      "IMDB": {},
-      "News Media": {},
-      "Reddit": { 
-        "gender":"70% male", 
-        "gender_cit":"",
-        "gender_link":""
+      "Common Crawl":{},
+      "Film transcripts":{},
+      "GoodReads":{},
+      "IMDB":{},
+      "News Media":{},
+      "Reddit":{ 
+        "gender":"67% male", 
+        "gender_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
+        "gender_link":"https://www.alphr.com/demographics-reddit/",
+        "age":"64% between 18 and 29",
+        "age_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
+        "age_link":"https://www.alphr.com/demographics-reddit/",
+        "country":"54% U.S.",
+        "country_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
+        "country_link":"https://www.alphr.com/demographics-reddit/"
       },
-      "School or other curricula": {},
-      "UN transcripts": {},
-      "Web scraping (other than Common Crawl)": {},
-      "Wikipedia": {},
-      "YELP": {},
-      "YouTube": {}  
+      "School or other curricula":{},
+      "UN transcripts":{},
+      "Web scraping (other than Common Crawl)":{},
+      "Wikipedia":{},
+      "YELP":{},
+      "YouTube":{}  
     },
     "Language": ["English", "Spanish", "Japanese"],
     "Country": ["Spain","Australia","Monaco"]
