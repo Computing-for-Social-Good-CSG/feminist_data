@@ -85,8 +85,6 @@ export function inputFactory(inputId, containerId, inputType, inputName){
 // creates group of HTML objects with bias citation links 
 export function populateCiteGroup(containerId, inputList, inputContent){
 
-    console.log(inputContent);
-
     for (var i=0; i<inputList.length; i++){
         if (i%3 == 0){
             var inputId = inputList[i];
@@ -103,6 +101,7 @@ export function populateCiteGroup(containerId, inputList, inputContent){
             checkBox.type = "checkbox";
             checkBox.value = inputId;
             checkBox.id = inputId;
+            checkBox.checked = true;
             citeText.textContent = " : " + inputContent[i];
             citeText.classList.add("cite-text");
             link.textContent = inputContent[i+1];

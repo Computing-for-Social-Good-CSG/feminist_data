@@ -12,26 +12,50 @@
 <body>
 
 <h1>Test Form</h1>
-<button type="button" onclick="document.getElementById('demo').innerHTML = Date()">Click me to display date.</button>
-<p id="demo"></p>
 
 <div class="container">
 	<div class="row">
 		<div class="col">
-
 			<div class="accordion" id="accordionContainer">
 				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingDataSource">
+					<h2 class="accordion-header" id="headerDataSource">
 						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataSource" aria-expanded="true" aria-controls="collapseDataSource">
 							Data Source
 						</button>
 					</h2>
-					<div id="collapseDataSource" class="accordion-collapse collapse show" aria-labelledby="headingDataSource" data-bs-parent="#accordionExample">
+					<div id="collapseDataSource" class="accordion-collapse collapse show" aria-labelledby="headerDataSource" data-bs-parent="#collapseDataSource">
 						<div class="accordion-body">
 							<p class="help-text">Only one item is selectable. If your data come from more than one source, we recommend filling out multiple forms.</p>
 							<div id="inputDataSource"></div>
 							<button class="btn btn-secondary" type="button" name="submit" id="sourceSubmit">Submit</button>
-							<form class="form-inline">
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headerSourceBias">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSourceBias" aria-expanded="false" aria-controls="collapseSourceBias">
+							Data Source Biases
+						</button>
+					</h2>
+					<div id="collapseSourceBias" class="accordion-collapse collapse" aria-labelledby="headerSourceBias" data-bs-parent="#collapseSourceBias">
+						<div class="accordion-body">
+							<div id="inputSourceBias"></div>
+							<button class="btn btn-secondary" type="button" name="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headerDates">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDates" aria-expanded="false" aria-controls="collapseCheckboxes1">
+							Generation and Collection Dates
+						</button>
+					</h2>
+					<div id="collapseDates" class="accordion-collapse collapse" aria-labelledby="collapseDates" data-bs-parent="#collapseDates">
+						<div class="accordion-body">
+							<div id="inputDates">
+								<form class="form-inline">
 								<div class="form-group" style="display: block;">
 									<label for="startDateGen">Data Generation, earliest date:</label>
 						            <input id="startDateGen" class="form-control" type="date" style="display: inline-block; width: 140px;" />
@@ -65,37 +89,8 @@
 						       	</div>
 
 					        </form>
-							<button class="btn btn-secondary" type="button" name="sourceSubmit">Submit</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingSourceBias">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSourceBias" aria-expanded="false" aria-controls="collapseSourceBias">
-							Data Source Biases
-						</button>
-					</h2>
-					<div id="collapseSourceBias" class="accordion-collapse collapse" aria-labelledby="headingSourceBias" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div id="inputSourceBias"></div>
-							<button class="btn btn-secondary" type="button" name="submit">Submit</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="jsonCheckboxes1">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCheckboxes1" aria-expanded="false" aria-controls="collapseCheckboxes1">
-							Checkbox template1
-						</button>
-					</h2>
-					<div id="collapseCheckboxes1" class="accordion-collapse collapse" aria-labelledby="jsonCheckboxes1" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div id="checkboxContainer1">
-
 							</div>
-							<button class="btn btn-secondary" type="button" name="sourceSubmit">Submit</button>
+							<button class="btn btn-secondary" type="button" name="submit" id="dateSubmit">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -111,7 +106,7 @@
 							<div id="checkboxContainer2">
 
 							</div>
-							<button class="btn btn-secondary" type="button" name="sourceSubmit">Submit</button>
+							<button class="btn btn-secondary" type="button" name="submit">Submit</button>
 						</div>
 					</div>
 				</div>
