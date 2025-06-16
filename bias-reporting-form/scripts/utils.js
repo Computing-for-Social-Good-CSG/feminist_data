@@ -10,8 +10,6 @@ export function formEmpty(accordionParent){
         return false;
     }
     for (var i = 0; i < radios.length; i++) {
-        console.log("THERE ARE RADIOS");
-
         if(radios[i].checked) {
             return false;
         }
@@ -57,7 +55,7 @@ export function populateInputGroup(containerId, inputList, inputType, inputName)
     }
 }
 
-// creates an HTML input object
+// creates an HTML input object 
 export function inputFactory(inputId, containerId, inputType, inputName){
 
     var container = document.getElementById(containerId);
@@ -82,4 +80,42 @@ export function inputFactory(inputId, containerId, inputType, inputName){
     container.appendChild(formCheck);
     formCheck.appendChild(checkBox);
     formCheck.appendChild(label);
+}
+
+// creates group of HTML objects with bias citation links 
+export function populateCiteGroup(containerId, inputList, inputContent){
+
+    console.log(inputContent);
+
+    for (var i=0; i<inputList.length; i++){
+        if (i%3 == 0){
+            var inputId = inputList[i];
+            var container = document.getElementById(containerId);
+            var formCheck = document.createElement("div")
+            formCheck.classList.add("form-check");
+            var checkBox = document.createElement('input');
+            checkBox.classList.add("form-check-input");
+            var label = document.createElement('label');
+            label.classList.add("form-check-label");
+            var citeText = document.createElement("p");
+            var link = document.createElement("a");
+
+            checkBox.type = "checkbox";
+            checkBox.value = inputId;
+            checkBox.id = inputId;
+            citeText.textContent = " : " + inputContent[i];
+            citeText.classList.add("cite-text");
+            link.textContent = inputContent[i+1];
+            link.setAttribute("href", inputContent[i+2]);
+            link.classList.add("cite-link");
+            label.setAttribute("for", inputId);
+
+            label.appendChild(document.createTextNode(inputId));
+            container.appendChild(formCheck);
+            formCheck.appendChild(checkBox);
+            formCheck.appendChild(label);
+            formCheck.appendChild(citeText);
+            formCheck.appendChild(link);
+        }        
+    }
 }
