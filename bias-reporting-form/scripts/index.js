@@ -3,14 +3,18 @@ import * as utils from './utils.js';
 // Global Variables
 var currentAccordion = 0; 
 var dataSourceArr = utils.pullData("Data Sources", "../data/data.json");
-const baseBiasList = ["Age","Country","Gender","Race","Socioeconomic Class"];
+const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 
 class Dataset {
     constructor () {
+        this.citation_list = [];
         this.data_source = "";
+        this.age = "";
+        this.class = "";
         this.lang_major = "";
         this.lang_dialect = "";
         this.country_list = "";
+        this.race = "";
         this.formal = "";
         this.gen_date_start = "";
         this.gen_date_start_est = false;
@@ -114,6 +118,32 @@ document.getElementById("sourceSubmit").addEventListener("click", function(){
     }
     utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox");
 })
+
+// When data source biases are submitted, update database 
+document.getElementById("sourceBiasSubmit").addEventListener("click", function(){
+
+    if (document.getElementById("Age").checked){
+        d.age = updateBias("Age");
+    } 
+    if (document.getElementById("Country").checked){
+        d.country_list = updateBias("Country");
+    }
+    if (document.getElementById("Language").checked){
+        d.lang_major = updateBias("Language");
+    }
+    if (document.getElementById("Race").checked){
+        d.race = updateBias("Race");
+    }
+    if (document.getElementById("Socioeconomic Class").checked){
+        d.class = updateBias("Socioeconomic Class");
+    }
+});
+
+function updateBias(biasTitle){
+    var formCheck = document.getElementById(biasTitle).parentElement;
+    var str = formCheck.querySelector(".cite-text").textContent;
+    return(str.substring(3, str.length));
+};
 
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function
