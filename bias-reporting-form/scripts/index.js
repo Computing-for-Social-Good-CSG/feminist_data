@@ -2,7 +2,7 @@ import * as utils from './utils.js';
 
 // Global Variables
 var currentAccordion = 0; 
-const dataSourceArr = utils.pullData("Data Sources", "../data/data.json");
+var dataSourceArr = utils.pullData("Data Sources", "../data/data.json");
 
 class Dataset {
     constructor () {
@@ -20,46 +20,6 @@ class Dataset {
         this.collect_date_end = "";
         this.collect_date_end_est = false;
     }
-
-    indexHandler(req, res) {
-        if (!req.isAuthenticated()) {
-            return res.end(`
-            <body>
-                <h3>Hello stranger!</h3>
-                <p>You're not authenticated, you need to <a href="/login">authenticate via Typeform</a>.
-            </body>
-            `)
-        }
-
-        if (this.DEFAULT_FORM_ID) {
-            return res.redirect(`/results/${this.DEFAULT_FORM_ID}`);
-        }
-
-        let data = JSON.stringify(req.user);
-        return res.end(`
-        <body>
-            <h3>Hello, %username%!</h3>
-            <p>Here's your token:</p><p style="color: blue;">${data}</p>
-            <p>Maybe you want to <a href="/logout">log out</a>?</p>
-        </body>
-        `);
-    }
-
-    set(varString, value) {
-        if(varString != "" && varString != null && value != null && value != "") {
-            this[varString] = value;
-            return true;
-        }
-
-        if (typeof value == "boolean" && value == this[varString])
-        {
-            console.log("Value unchanged, ["+varString+":"+value+"], no action taken");
-            return true;
-        }
-
-        console.log("Empty parameter found when setting database variable ["+varString+":"+value+"]");
-        return false;
-    }
 }
 
 const d = new Dataset;
@@ -67,13 +27,10 @@ const d = new Dataset;
 // Add submit function to all buttons
 // NOTE: I think buttons may be type "submit" in the future, when sending the radio values
 document.addEventListener("click", function(event){
-    if(event.target.name == "sourceSubmit"){
-        console.log(event.target.name);
-
+    if(event.target.name == "submit"){
         clickSubmit(event.target.parentElement);
     }
 });
-
 
 
 function clickSubmit(buttonParent) {
@@ -88,11 +45,7 @@ function clickSubmit(buttonParent) {
     }
 
     //TODO add an "other" option with write in 
-
-    // add data source to object 
-    d.data_source = document.querySelector('input[name="dataSource"]:checked').value;
-
-
+    
     // close current accordion element
     var currentCollapsable = new bootstrap.Collapse(accordionList[currentAccordion], {
         toggle: false
@@ -129,8 +82,18 @@ function clickSubmit(buttonParent) {
 
 // Populate initial form options
 utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
-
 const langArr = utils.pullData("Language", "../data/data.json");
 utils.populateInputGroup("checkboxContainer1", langArr, "checkbox");
 const countryArr = utils.pullData("Country", "../data/data.json");
 utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
+
+// When Data Source is submitted, populate suggested biases 
+document.getElementById("sourceSubmit").addEventListener("click", function(){
+    
+    // TODO if resubmitting, clear out all previous html elements
+
+    d.data_source = document.querySelector('input[name="dataSource"]:checked').value;
+    var biasItems = dataSourceArr[d.data_source];
+    utils.populateCiteGroup("inputSourceBias", Object.keys(biasItems), Object.values(biasItems));
+
+})

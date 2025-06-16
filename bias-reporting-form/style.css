@@ -1,0 +1,10 @@
+.cite-text {
+	display: inline-block;
+	margin-bottom: 2px;
+}
+.cite-link {
+	display: block;
+	font-size: 12px;
+	color: gray;
+	margin-bottom: 1rem;
+}
