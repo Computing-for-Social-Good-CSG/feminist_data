@@ -45,25 +45,28 @@ var d = new Dataset;
 
 // Add submit function to all buttons
 // NOTE: I think buttons may be type "submit" in the future, when sending the radio values
-document.addEventListener("click", function(event){
-    if(event.target.name == "submit"){
-        clickSubmit(event.target.parentElement);
-    }
-});
+// document.addEventListener("click", function(event){
+//     if(event.target.name == "submit"){
+//         clickSubmit(event.target.parentElement);
+//     }
+// });
 
-function clickSubmit(buttonParent) {
+function isEmpty(buttonParent) {
+    // check that there is a selection
+    if(utils.formEmpty(buttonParent)){
+        //TODO No option was selected in this form, display some warning and do not continue
+        return true;
+    }
+    return false;
+
+    //TODO add an "other" option with write in 
+}
+
+function doCollapse(buttonParent) {
     var accordionContainer = document.getElementById('accordionContainer');
     var accordionList = accordionContainer.querySelectorAll(`[class*="accordion-collapse"]`);
     currentAccordion = utils.getCurrentAccordion(buttonParent, accordionList);
 
-    // check that there is a selection
-    if(utils.formEmpty(buttonParent)){
-        //TODO No option was selected in this form, display some warning and do not continue
-        return;
-    }
-
-    //TODO add an "other" option with write in 
-    
     // close current accordion element
     var currentCollapsable = new bootstrap.Collapse(accordionList[currentAccordion], {
         toggle: false
@@ -90,9 +93,17 @@ utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 // utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
 
 // When Data Source is submitted, populate suggested biases 
-document.getElementById("sourceSubmit").addEventListener("click", function(){
+document.getElementById("sourceSubmit").addEventListener("click", function(event){
     
     // TODO if resubmitting, clear out all previous html elements
+    var parent = event.target.parentElement;
+    var empty = isEmpty(parent);
+    if (empty) {
+        console.log("No selection, not taking any action")
+        return;
+    }
+
+    doCollapse(parent);
 
     d.data_source = document.querySelector('input[name="dataSource"]:checked').value;
     var sourceArr = dataSourceArr[d.data_source];
@@ -107,7 +118,7 @@ document.getElementById("sourceSubmit").addEventListener("click", function(){
     }
 
     // create HTML for known biases 
-    utils.populateCiteGroup("inputSourceBias", knownBiasKeys, Object.values(sourceArr));
+    utils.populateCiteGroup("inputSourceBias", knownBiasKeys, Object.values(sourceArr), "sourceBias");
 
     // populate unchecked blanks for the rest
     var unknownBiasTitles = [] 
@@ -116,11 +127,20 @@ document.getElementById("sourceSubmit").addEventListener("click", function(){
             unknownBiasTitles.push(baseBiasList[i]);
         }
     }
-    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox");
+    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
 })
 
 // When data source biases are submitted, update database 
-document.getElementById("sourceBiasSubmit").addEventListener("click", function(){
+document.getElementById("sourceBiasSubmit").addEventListener("click", function(event){
+
+    var parent = event.target.parentElement;
+    var empty = isEmpty(parent);
+    if (empty) {
+        console.log("No selection, not taking any action")
+        return;
+    }
+
+    doCollapse(parent);
 
     if (document.getElementById("Age").checked){
         d.age = updateBias("Age");
@@ -148,7 +168,19 @@ function updateBias(biasTitle){
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function
     // does not check for other garbage values before overwriting
-document.getElementById("dateSubmit").addEventListener("click", function(){
+document.getElementById("dateSubmit").addEventListener("click", function(event){
+
+    // Custom 'empty' check for dates, requires all dates filled
+    var parent = event.target.parentElement;
+    var dates = parent.querySelectorAll(`[type*="date"]`);
+    for (var i = 0; i < dates.length; i++) {
+        if(dates[i].value == "") {
+            console.log("Empty date, taking no action");
+            return false;
+        }
+    }
+
+    doCollapse(parent);
 
     if(d.set('gen_date_start', document.getElementById('startDateGen').value)) {
        d.set('gen_date_start_est', document.getElementById('startDateGenEst').checked);
@@ -162,4 +194,26 @@ document.getElementById("dateSubmit").addEventListener("click", function(){
     if (d.set('collect_date_end', document.getElementById('endDateCol').value)) {
         d.set('collect_date_end_est', document.getElementById('endDateColEst').checked);
     }
+});
+
+
+
+document.getElementById("langSubmit").addEventListener("click", function(event){
+
+    // Language button was clicked, update dialect box using chosen language and dialect data stored
+
+    var parent = event.target.parentElement;
+    var empty = isEmpty(parent);
+    if (empty) {
+        console.log("No selection, not taking any action")
+        return;
+    }
+
+    doCollapse(parent);
+
+    //? Should we block progression if nothing is clicked?
+    //? If nothing is clicked, what is the desired behavior
+
+
+
 });

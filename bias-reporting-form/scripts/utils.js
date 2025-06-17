@@ -1,16 +1,24 @@
 // Global Variables 
-
+var collapseBlacklist = ["lang"]; // Expand as needed
 
 // Get all radio input of parent and return true if none are toggled
 export function formEmpty(accordionParent){
-    // TODO: Whitelist cases where this is acceptable, like if no radios exist in container
-    var radios = accordionParent.querySelectorAll(`[name*="dataSource"]`);
-    if (radios.length <= 0) {
-        // Don't block submit button if there are no radio elements
+
+    // Blacklist, if no checkboxes are clicked in specific scenarios do not progress
+    var parentName = accordionParent.getAttribute("name");
+    var blacklisted = collapseBlacklist.includes(parentName);
+    var inputs = accordionParent.querySelectorAll(`[name*="${parentName}"]`);
+    var radios = accordionParent.querySelectorAll(`[type*="radio"]`);
+    
+    // If no radio inputs and not blacklisted
+    if (!blacklisted && radios.length <= 0) {
+        // Don't block submit button if there are no radio elements and not blacklisted
         return false;
     }
-    for (var i = 0; i < radios.length; i++) {
-        if(radios[i].checked) {
+
+    // Check for any toggled inputs
+    for (var i = 0; i < inputs.length; i++) {
+        if(inputs[i].checked) {
             return false;
         }
     }
@@ -72,9 +80,9 @@ export function inputFactory(inputId, containerId, inputType, inputName){
     label.setAttribute("for", inputId);
 
     // if it's a radio button, set the name attribute (prevents duplicate selection) 
-    if (inputType == "radio") {
-        checkBox.name = inputName;
-    }
+    // if (inputType == "radio") {
+    checkBox.name = inputName; // Always setting name currently, no downside
+    // }
 
     label.appendChild(document.createTextNode(inputId));
     container.appendChild(formCheck);
@@ -83,7 +91,7 @@ export function inputFactory(inputId, containerId, inputType, inputName){
 }
 
 // creates group of HTML objects with bias citation links 
-export function populateCiteGroup(containerId, inputList, inputContent){
+export function populateCiteGroup(containerId, inputList, inputContent, inputName){
 
     for (var i=0; i<inputList.length; i++){
         if (i%3 == 0){
@@ -102,6 +110,7 @@ export function populateCiteGroup(containerId, inputList, inputContent){
             checkBox.value = inputId;
             checkBox.id = inputId;
             checkBox.checked = true;
+            checkBox.name = inputName;
             citeText.textContent = " : " + inputContent[i];
             citeText.classList.add("cite-text");
             link.textContent = inputContent[i+1];
