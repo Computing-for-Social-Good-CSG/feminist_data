@@ -9,15 +9,18 @@
       "IMDB":{},
       "News Media":{},
       "Reddit":{ 
-        "Gender":"67% male", 
-        "gender_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
-        "gender_link":"https://www.alphr.com/demographics-reddit/",
         "Age":"64% between 18 and 29",
         "age_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
         "age_link":"https://www.alphr.com/demographics-reddit/",
         "Country":"54% U.S.",
         "country_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
-        "country_link":"https://www.alphr.com/demographics-reddit/"
+        "country_link":"https://www.alphr.com/demographics-reddit/",
+        "Language":"97% English",
+        "lang_cite":"Felipe Hoffa. 2021. The most popular languages on Reddit.",
+        "lang_link":"https://medium.com/data-science/the-most-popular-languages-on-reddit-analyzed-with-snowflake-and-a-java-udtf-4e58c8ba473c",
+        "Gender":"67% male", 
+        "gender_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
+        "gender_link":"https://www.alphr.com/demographics-reddit/"
       },
       "School or other curricula":{},
       "UN transcripts":{},

@@ -1,16 +1,24 @@
 // Global Variables 
-
+var collapseBlacklist = ["lang"]; // Expand as needed
 
 // Get all radio input of parent and return true if none are toggled
 export function formEmpty(accordionParent){
-    // TODO: Whitelist cases where this is acceptable, like if no radios exist in container
-    var radios = accordionParent.querySelectorAll(`[name*="dataSource"]`);
-    if (radios.length <= 0) {
-        // Don't block submit button if there are no radio elements
+
+    // Blacklist, if no checkboxes are clicked in specific scenarios do not progress
+    var parentName = accordionParent.getAttribute("name");
+    var blacklisted = collapseBlacklist.includes(parentName);
+    var inputs = accordionParent.querySelectorAll(`[name*="${parentName}"]`);
+    var radios = accordionParent.querySelectorAll(`[type*="radio"]`);
+    
+    // If no radio inputs and not blacklisted
+    if (!blacklisted && radios.length <= 0) {
+        // Don't block submit button if there are no radio elements and not blacklisted
         return false;
     }
-    for (var i = 0; i < radios.length; i++) {
-        if(radios[i].checked) {
+
+    // Check for any toggled inputs
+    for (var i = 0; i < inputs.length; i++) {
+        if(inputs[i].checked) {
             return false;
         }
     }
@@ -72,9 +80,9 @@ export function inputFactory(inputId, containerId, inputType, inputName){
     label.setAttribute("for", inputId);
 
     // if it's a radio button, set the name attribute (prevents duplicate selection) 
-    if (inputType == "radio") {
-        checkBox.name = inputName;
-    }
+    // if (inputType == "radio") {
+    checkBox.name = inputName; // Always setting name currently, no downside
+    // }
 
     label.appendChild(document.createTextNode(inputId));
     container.appendChild(formCheck);
@@ -83,9 +91,7 @@ export function inputFactory(inputId, containerId, inputType, inputName){
 }
 
 // creates group of HTML objects with bias citation links 
-export function populateCiteGroup(containerId, inputList, inputContent){
-
-    console.log(inputContent);
+export function populateCiteGroup(containerId, inputList, inputContent, inputName){
 
     for (var i=0; i<inputList.length; i++){
         if (i%3 == 0){
@@ -103,6 +109,8 @@ export function populateCiteGroup(containerId, inputList, inputContent){
             checkBox.type = "checkbox";
             checkBox.value = inputId;
             checkBox.id = inputId;
+            checkBox.checked = true;
+            checkBox.name = inputName;
             citeText.textContent = " : " + inputContent[i];
             citeText.classList.add("cite-text");
             link.textContent = inputContent[i+1];
@@ -117,5 +125,54 @@ export function populateCiteGroup(containerId, inputList, inputContent){
             formCheck.appendChild(citeText);
             formCheck.appendChild(link);
         }        
+    }
+}
+
+export function populateDialectHeader(containerId, languageHeader, inputName) {
+    // console.log("LANGUAGE HEADER: "+ languageHeader);
+}
+
+export function populateDialectGroup(containerId, inputDialect, inputName) {
+    // console.log("DIALECT: "+ inputDialect);
+   
+        var container = document.getElementById(containerId);
+        var formCheck = document.createElement("div")
+        formCheck.classList.add("form-check");
+        var checkBox = document.createElement('input');
+        checkBox.classList.add("form-check-input");
+        var label = document.createElement('label');
+        label.classList.add("form-check-label");
+
+        checkBox.type = "checkbox";
+        checkBox.value = inputDialect;
+        checkBox.id = inputDialect;
+        checkBox.checked = false;
+        checkBox.name = inputName;
+
+        label.setAttribute("for", inputDialect);
+
+        label.appendChild(document.createTextNode(inputDialect));
+        container.appendChild(formCheck);
+        formCheck.appendChild(checkBox);
+        formCheck.appendChild(label);
+}
+
+export function populateCountryGroup(containerId, countryList, inputName) {
+    // console.log("COUNTRY LIST: "+ countryList);
+}
+
+export function populateFormalityGroup(containerId, dialectHeader, inputFormality, inputName) {
+    // console.log("DIALECT: "+ dialectHeader);
+    // console.log("FORMALITY: "+ inputFormality);
+}
+
+
+// Known issue in below function: 
+// If a checked box gets removed, and will be re-added, this value is lost. Need a way to preserve state or re-check boxes if they re-appear
+export function removeChildOfClass(containerId, childClass) {
+    var containerTarget = document.getElementById(containerId);
+    var choppingBlock = containerTarget.querySelectorAll(`[class*="${childClass}"]`);
+    for (var i = 0; i < choppingBlock.length; i++){
+        choppingBlock[i].remove();
     }
 }

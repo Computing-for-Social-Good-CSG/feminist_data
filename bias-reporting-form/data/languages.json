@@ -1,0 +1,53 @@
+{
+    "Languages":{
+      "English":{
+        "Countries":{}
+      },
+      "Chinese":{
+        "Countries":{},
+        "Dialects":{
+          "Mandarin":{},
+          "Cantonese":{},
+          "Wu":{}
+        }
+      },
+      "Hindi":{},
+      "Spanish":{},
+      "Arabic":{
+        "Countries":{},
+        "Dialects":{
+          "Modern Standard Arabic":{
+            "Countries":[],
+            "Formality":"Formal"
+          },
+          "Egyptian Arabic":{
+            "Countries":["Egypt"],
+            "Formality":"Vernacular"
+          },
+          "Levantine Arabic":{
+            "Countries":["Syria, Israel, Jordan, Lebanon, Palestine, Turkey"],
+            "Formality":"Vernacular"
+          },
+          "Gulf Arabic":{
+            "Countries":["Kuwait, Iraq, Qatar, Saudi Arabia"],
+            "Formality":"Vernacular"
+          }
+        }
+      },
+      "French":{},
+      "Bengali":{},
+      "Portuguese":{},
+      "Russian":{},
+      "Indonesian":{},
+      "Urdu":{},
+      "German":{},
+      "Japanese":{},
+      "Nigerian Pidgin":{},
+      "Marathi":{},
+      "Vietnamese":{},
+      "Telugu":{},
+      "Hausa":{},
+      "Turkish":{}
+    },
+    "Country": ["Spain","Australia","Monaco"]
+}
