@@ -12,9 +12,9 @@ class Dataset {
         this.data_source = "";
         this.age = "";
         this.class = "";
-        this.lang_major = "";
-        this.lang_dialect = "";
-        this.country_list = "";
+        this.lang_major = [];
+        this.lang_dialect = [];
+        this.country_list = [];
         this.race = "";
         this.formal = "";
         this.gen_date_start = "";
@@ -165,6 +165,120 @@ function updateBias(biasTitle){
     return(str.substring(3, str.length));
 };
 
+
+document.getElementById("langSubmit").addEventListener("click", function(event){
+
+    // Language button was clicked, update dialect box using chosen language and dialect data stored
+
+    var parent = event.target.parentElement;
+    var parentName = parent.getAttribute("name");
+    var empty = isEmpty(parent);
+    // lang is blacklisted, so this requires an input checked to progress
+    if (empty) {
+        console.log("No selection, not taking any action")
+        return;
+    }
+
+    doCollapse(parent);
+
+    //TODO update Dataset
+    var langsChecked = [];
+    var formList = parent.querySelectorAll(`[name*="${parentName}"]`);
+
+    for(var i=0; i<formList.length; i++) {
+        if (formList[i].checked) {
+            langsChecked.push(formList[i].value);
+        }
+    }
+    // Not using set as that was not made for arrays
+    // No null check is needed if we detect selections were made
+    d.lang_major = langsChecked;
+
+    //TODO populate dialect section
+    // To best populate dialect section, we may need to iterate through one at a time until we find our matches...
+    for(var i=0; i<Object.keys(langArr).length; i++) {
+        if(d.lang_major.includes(Object.keys(langArr)[i])) {
+
+            if (!Object.values(langArr)[i].hasOwnProperty("Dialects")) {
+                // no dialect data, break out early
+                console.log("No dialects, exit early");
+                continue;
+            }
+
+            // Using match, create sub boxes for each dialect
+            var dialectArr = Object.values(langArr)[i].Dialects;
+
+            // Add to country list as we go through multiple dialects
+            var countryAll = [];
+            utils.populateDialectHeader("inputDialect", Object.keys(langArr)[i], "dialect");
+
+            for(var y=0; y<Object.keys(dialectArr).length; y++) {
+                var dialect = Object.keys(dialectArr)[y];
+                var formality = Object.values(dialectArr)[y].Formality;;
+                var countrySublist = Object.values(dialectArr)[y].Countries;
+                // At this level we have each dialect object. and are iterating the indeces which sh                    
+
+                utils.populateDialectGroup("inputDialect", dialect, "dialect");
+                
+                // loop through list of countries, if it doesn't exist in all list, add it
+                for(var x=0; x<countrySublist.length; x++) {
+                    if (!countryAll.includes(countrySublist[x])) {
+                        countryAll.push(countrySublist[x]);
+                    }
+                }
+
+                // TODO Formality desires are vague, but should do here
+                // Not sure if we want a checkbox, or if we want some other input format with this answer as a given. Multiple choice radios, etc...
+                // utils.populateFormalityGroup("inputFormality", dialect, formality, "formality");
+
+            }
+
+            // TODO Populate all countries now that we have iterated through all dialects
+            // Might want to sort alphabetically at some point
+            utils.populateCountryGroup("inputCountry", countryAll, "country");
+
+        }
+    }
+
+
+
+
+    // for(var i=0; i<d.lang_major.length; i++) {
+    //     if(Object.keys(langArr).includes(d.lang_major[i])) {
+    //         console.log(d.lang_major[i]);
+    //         utils.populateDialectHeader("inputDialect", d.lang_major[i], "dialect");
+
+    //         // call populateDialectGroup once, for loop should be inside of it. But need to know what is necessary first
+    //         var subArray = Object.entries(langArr)
+    //         for(var y=0; y<Object.keys(langArr[]); y++) {
+
+    //         }
+    //     }
+        // utils.populateDialectHeader("inputDialect", d.lang_major[i], "dialect");
+        // utils.populateDialectGroup("inputDialect", d.lang_major[i], "dialect");
+    // }
+    // utils.populateDialectGroup("inputDialect", d.lang_major[i], "dialect");
+
+    // console.log(langArr);
+    // console.log(langArr) langArr.find(item => item.name === d.lang_major[i]);
+
+     // BREAKDOWN
+     // Each language should be represented by a header (no box)
+     // and under is all related dialects as check boxes
+     
+     // With all the dialects selected, the next accordion will fill with countries
+     // Assume these are also check boxes
+     // If there are duplicates, only represent them once
+
+     // the following accordion will be the formality, and should probably maintain some dialect header so it is visually understandable
+
+
+
+
+
+
+});
+
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function
     // does not check for other garbage values before overwriting
@@ -194,26 +308,4 @@ document.getElementById("dateSubmit").addEventListener("click", function(event){
     if (d.set('collect_date_end', document.getElementById('endDateCol').value)) {
         d.set('collect_date_end_est', document.getElementById('endDateColEst').checked);
     }
-});
-
-
-
-document.getElementById("langSubmit").addEventListener("click", function(event){
-
-    // Language button was clicked, update dialect box using chosen language and dialect data stored
-
-    var parent = event.target.parentElement;
-    var empty = isEmpty(parent);
-    if (empty) {
-        console.log("No selection, not taking any action")
-        return;
-    }
-
-    doCollapse(parent);
-
-    //? Should we block progression if nothing is clicked?
-    //? If nothing is clicked, what is the desired behavior
-
-
-
 });

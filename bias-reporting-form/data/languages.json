@@ -17,19 +17,19 @@
         "Countries":{},
         "Dialects":{
           "Modern Standard Arabic":{
-            "Countries":{},
+            "Countries":[],
             "Formality":"Formal"
           },
           "Egyptian Arabic":{
-            "Countries":"Egypt",
+            "Countries":["Egypt"],
             "Formality":"Vernacular"
           },
           "Levantine Arabic":{
-            "Countries":"Syria, Israel, Jordan, Lebanon, Palestine, Turkey",
+            "Countries":["Syria, Israel, Jordan, Lebanon, Palestine, Turkey"],
             "Formality":"Vernacular"
           },
           "Gulf Arabic":{
-            "Countries":"Kuwait, Iraq, Qatar, Saudi Arabia",
+            "Countries":["Kuwait, Iraq, Qatar, Saudi Arabia"],
             "Formality":"Vernacular"
           }
         }

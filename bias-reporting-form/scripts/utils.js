@@ -127,3 +127,41 @@ export function populateCiteGroup(containerId, inputList, inputContent, inputNam
         }        
     }
 }
+
+export function populateDialectHeader(containerId, languageHeader, inputName) {
+    console.log("LANGUAGE HEADER: "+ languageHeader);
+}
+
+export function populateDialectGroup(containerId, inputDialect, inputName) {
+    console.log("DIALECT: "+ inputDialect);
+   
+        var container = document.getElementById(containerId);
+        var formCheck = document.createElement("div")
+        formCheck.classList.add("form-check");
+        var checkBox = document.createElement('input');
+        checkBox.classList.add("form-check-input");
+        var label = document.createElement('label');
+        label.classList.add("form-check-label");
+
+        checkBox.type = "checkbox";
+        checkBox.value = inputDialect;
+        checkBox.id = inputDialect;
+        checkBox.checked = false;
+        checkBox.name = inputName;
+
+        label.setAttribute("for", inputDialect);
+
+        label.appendChild(document.createTextNode(inputDialect));
+        container.appendChild(formCheck);
+        formCheck.appendChild(checkBox);
+        formCheck.appendChild(label);
+}
+
+export function populateCountryGroup(containerId, countryList, inputName) {
+    console.log("COUNTRY LIST: "+ countryList);
+}
+
+export function populateFormalityGroup(containerId, dialectHeader, inputFormality, inputName) {
+    console.log("DIALECT: "+ dialectHeader);
+    console.log("FORMALITY: "+ inputFormality);
+}
