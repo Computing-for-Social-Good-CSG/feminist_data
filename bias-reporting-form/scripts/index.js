@@ -118,6 +118,7 @@ document.getElementById("sourceSubmit").addEventListener("click", function(event
     }
 
     // create HTML for known biases 
+    utils.removeChildOfClass("inputSourceBias","form-check");
     utils.populateCiteGroup("inputSourceBias", knownBiasKeys, Object.values(sourceArr), "sourceBias");
 
     // populate unchecked blanks for the rest
@@ -159,6 +160,11 @@ document.getElementById("sourceBiasSubmit").addEventListener("click", function(e
     }
 });
 
+// Known issue in below function: 
+// var str = formCheck.querySelector(".cite-text").textContent;
+// When checking the boxes below citations, such as "Race" a null read error occurs
+// Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
+
 function updateBias(biasTitle){
     var formCheck = document.getElementById(biasTitle).parentElement;
     var str = formCheck.querySelector(".cite-text").textContent;
@@ -173,6 +179,12 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
     var parent = event.target.parentElement;
     var parentName = parent.getAttribute("name");
     var empty = isEmpty(parent);
+
+    // Cleaning up divs that get populated from this action
+    // TODO utils.removeChildOfClass("inputDialect","SOME HEADER CLASS");
+    utils.removeChildOfClass("inputDialect","form-check");
+    // TODO utils.removeChildOfClass("inputCountry","SOME CLASS");
+
     // lang is blacklisted, so this requires an input checked to progress
     if (empty) {
         console.log("No selection, not taking any action")
@@ -201,7 +213,7 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
             if (!Object.values(langArr)[i].hasOwnProperty("Dialects")) {
                 // no dialect data, break out early
-                console.log("No dialects, exit early");
+                // console.log("No dialects, exit early");
                 continue;
             }
 
@@ -210,21 +222,35 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
             // Add to country list as we go through multiple dialects
             var countryAll = [];
+
             utils.populateDialectHeader("inputDialect", Object.keys(langArr)[i], "dialect");
 
             for(var y=0; y<Object.keys(dialectArr).length; y++) {
                 var dialect = Object.keys(dialectArr)[y];
                 var formality = Object.values(dialectArr)[y].Formality;;
                 var countrySublist = Object.values(dialectArr)[y].Countries;
-                // At this level we have each dialect object. and are iterating the indeces which sh                    
+                // At this level we have each dialect object. and are iterating the indeces which sh             
 
                 utils.populateDialectGroup("inputDialect", dialect, "dialect");
+
+
+                if (!Object.values(dialectArr)[y].hasOwnProperty("Countries")) {
+                    // no dialect data, break out early
+                    // console.log("Dialects, but no Countries, exit early");
+                    continue;
+                }
                 
                 // loop through list of countries, if it doesn't exist in all list, add it
                 for(var x=0; x<countrySublist.length; x++) {
                     if (!countryAll.includes(countrySublist[x])) {
                         countryAll.push(countrySublist[x]);
                     }
+                }
+
+                if (!Object.values(dialectArr)[y].hasOwnProperty("Formality")) {
+                    // no dialect data, break out early
+                    // console.log("Dialects, but no Formality, exit early");
+                    continue;
                 }
 
                 // TODO Formality desires are vague, but should do here
@@ -239,42 +265,6 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
         }
     }
-
-
-
-
-    // for(var i=0; i<d.lang_major.length; i++) {
-    //     if(Object.keys(langArr).includes(d.lang_major[i])) {
-    //         console.log(d.lang_major[i]);
-    //         utils.populateDialectHeader("inputDialect", d.lang_major[i], "dialect");
-
-    //         // call populateDialectGroup once, for loop should be inside of it. But need to know what is necessary first
-    //         var subArray = Object.entries(langArr)
-    //         for(var y=0; y<Object.keys(langArr[]); y++) {
-
-    //         }
-    //     }
-        // utils.populateDialectHeader("inputDialect", d.lang_major[i], "dialect");
-        // utils.populateDialectGroup("inputDialect", d.lang_major[i], "dialect");
-    // }
-    // utils.populateDialectGroup("inputDialect", d.lang_major[i], "dialect");
-
-    // console.log(langArr);
-    // console.log(langArr) langArr.find(item => item.name === d.lang_major[i]);
-
-     // BREAKDOWN
-     // Each language should be represented by a header (no box)
-     // and under is all related dialects as check boxes
-     
-     // With all the dialects selected, the next accordion will fill with countries
-     // Assume these are also check boxes
-     // If there are duplicates, only represent them once
-
-     // the following accordion will be the formality, and should probably maintain some dialect header so it is visually understandable
-
-
-
-
 
 
 });

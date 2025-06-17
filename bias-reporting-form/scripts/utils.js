@@ -129,11 +129,11 @@ export function populateCiteGroup(containerId, inputList, inputContent, inputNam
 }
 
 export function populateDialectHeader(containerId, languageHeader, inputName) {
-    console.log("LANGUAGE HEADER: "+ languageHeader);
+    // console.log("LANGUAGE HEADER: "+ languageHeader);
 }
 
 export function populateDialectGroup(containerId, inputDialect, inputName) {
-    console.log("DIALECT: "+ inputDialect);
+    // console.log("DIALECT: "+ inputDialect);
    
         var container = document.getElementById(containerId);
         var formCheck = document.createElement("div")
@@ -158,10 +158,21 @@ export function populateDialectGroup(containerId, inputDialect, inputName) {
 }
 
 export function populateCountryGroup(containerId, countryList, inputName) {
-    console.log("COUNTRY LIST: "+ countryList);
+    // console.log("COUNTRY LIST: "+ countryList);
 }
 
 export function populateFormalityGroup(containerId, dialectHeader, inputFormality, inputName) {
-    console.log("DIALECT: "+ dialectHeader);
-    console.log("FORMALITY: "+ inputFormality);
+    // console.log("DIALECT: "+ dialectHeader);
+    // console.log("FORMALITY: "+ inputFormality);
+}
+
+
+// Known issue in below function: 
+// If a checked box gets removed, and will be re-added, this value is lost. Need a way to preserve state or re-check boxes if they re-appear
+export function removeChildOfClass(containerId, childClass) {
+    var containerTarget = document.getElementById(containerId);
+    var choppingBlock = containerTarget.querySelectorAll(`[class*="${childClass}"]`);
+    for (var i = 0; i < choppingBlock.length; i++){
+        choppingBlock[i].remove();
+    }
 }
