@@ -171,6 +171,7 @@ function updateBias(biasTitle){
     return(str.substring(3, str.length));
 };
 
+var countryAll = [];
 
 document.getElementById("langSubmit").addEventListener("click", function(event){
 
@@ -206,6 +207,9 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
     // No null check is needed if we detect selections were made
     d.lang_major = langsChecked;
 
+    // clear countries list in case of resubmission 
+    countryAll = [];
+
     //TODO populate dialect section
     // To best populate dialect section, we may need to iterate through one at a time until we find our matches...
     for(var i=0; i<Object.keys(langArr).length; i++) {
@@ -221,14 +225,14 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
             var dialectArr = Object.values(langArr)[i].Dialects;
 
             // Add to country list as we go through multiple dialects
-            var countryAll = [];
-
+            
             utils.populateDialectHeader("inputDialect", Object.keys(langArr)[i], "dialect");
 
             for(var y=0; y<Object.keys(dialectArr).length; y++) {
                 var dialect = Object.keys(dialectArr)[y];
                 var formality = Object.values(dialectArr)[y].Formality;;
                 var countrySublist = Object.values(dialectArr)[y].Countries;
+
                 // At this level we have each dialect object. and are iterating the indeces which sh             
 
                 utils.populateDialectGroup("inputDialect", dialect, "dialect");
@@ -236,10 +240,10 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
                 if (!Object.values(dialectArr)[y].hasOwnProperty("Countries")) {
                     // no dialect data, break out early
-                    // console.log("Dialects, but no Countries, exit early");
+                    console.log("Dialects, but no Countries, exit early");
                     continue;
                 }
-                
+
                 // loop through list of countries, if it doesn't exist in all list, add it
                 for(var x=0; x<countrySublist.length; x++) {
                     if (!countryAll.includes(countrySublist[x])) {
@@ -249,7 +253,7 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
                 if (!Object.values(dialectArr)[y].hasOwnProperty("Formality")) {
                     // no dialect data, break out early
-                    // console.log("Dialects, but no Formality, exit early");
+                    console.log("Dialects, but no Formality, exit early");
                     continue;
                 }
 
@@ -261,12 +265,25 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
             // TODO Populate all countries now that we have iterated through all dialects
             // Might want to sort alphabetically at some point
-            utils.populateCountryGroup("inputCountry", countryAll, "country");
+            // utils.populateCountryGroup("inputCountry", countryAll, "country");
 
         }
     }
 
 
+});
+
+document.getElementById("dialectSubmit").addEventListener("click", function(event){
+    var parent = event.target.parentElement;
+    var dialectNodes = parent.querySelectorAll(`[name*="dialect"]:checked`);
+    var dialectSelected = Array.from(dialectNodes).map(checkbox => checkbox.value);
+    var dialectCountries = langArr[d.lang_major].Dialects[dialectSelected[0]].Countries[0];
+    dialectCountries = dialectCountries.split(", ");
+    
+    utils.removeChildOfClass("inputDialectBias","form-check");
+    utils.populateCountryGroup("inputDialectBias", dialectSelected[0], dialectCountries, "countries");
+
+    doCollapse(parent);
 });
 
 // On submit, modify the database with date variables 
