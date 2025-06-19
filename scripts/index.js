@@ -18,6 +18,7 @@ class Dataset {
         this.country_list = [];
         this.race = "";
         this.formal = "";
+        // change gen to timestamp
         this.gen_date_start = "";
         this.gen_date_start_est = false;
         this.gen_date_end = "";
