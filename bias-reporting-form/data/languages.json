@@ -18,18 +18,20 @@
         "Dialects":{
           "Modern Standard Arabic":{
             "Countries":[],
+            "Context":["Legal", "Educational", "Literature", "Academica", "News Media"],
             "Formality":"Formal"
           },
           "Egyptian Arabic":{
             "Countries":["Egypt"],
+            "Context":["Spoken, conversational", "Social Media"],
             "Formality":"Vernacular"
           },
           "Levantine Arabic":{
-            "Countries":["Syria, Israel, Jordan, Lebanon, Palestine, Turkey"],
+            "Countries":["Syria", "Israel", "Jordan", "Lebanon", "Palestine", "Turkey"],
             "Formality":"Vernacular"
           },
           "Gulf Arabic":{
-            "Countries":["Kuwait, Iraq, Qatar, Saudi Arabia"],
+            "Countries":["Kuwait", "Iraq", "Qatar", "Saudi Arabia"],
             "Formality":"Vernacular"
           }
         }
