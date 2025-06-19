@@ -128,12 +128,6 @@ export function populateCiteGroup(containerId, inputList, inputContent, inputNam
     }
 }
 
-export function populateDialectHeader(containerId, languageHeader, inputName) {
-    // console.log("LANGUAGE HEADER: "+ languageHeader);
-}
-
-
-
 export function populateDialectGroup(containerId, inputDialect, inputName) {
     // console.log("DIALECT: "+ inputDialect);
    
@@ -159,8 +153,20 @@ export function populateDialectGroup(containerId, inputDialect, inputName) {
         formCheck.appendChild(label);
 }
 
+// General header addition given container
+export function populateHeader(containerId, text, inputName) {
+
+    var container = document.getElementById(containerId);
+    var h6 = document.createElement("h6");
+    h6.classList.add("suggested-heading");
+    h6.textContent = text;
+    h6.name = inputName;
+    container.appendChild(h6);
+}
+
 // TODO add a parameter to populateInputGroup to have a box checked or not and remove this function 
-export function populateCountryGroup(containerId, dialect, countrySelected, inputName) {
+// TODO this can be renamed as a checkbox factory or similar, not specific to biasGroup
+export function populateBiasGroup(containerId, dialect, entries, inputName, checked) {
     
     // TODO list all countries, but only have the suggested ones selected 
     // -- the dialect country lists need to be parsed into a single large array 
@@ -168,13 +174,9 @@ export function populateCountryGroup(containerId, dialect, countrySelected, inpu
     // console.log(countryList.length);
 
     var container = document.getElementById(containerId);
-    var h6 = document.createElement("h6");
-    h6.classList.add("suggested-heading");
-    h6.textContent = "Suggested countries based on dialect: " + dialect;
-    container.appendChild(h6);
 
-    for (var i=0; i<countrySelected.length; i++){
-        var inputId = countrySelected[i];
+    for (var i=0; i<entries.length; i++){
+        var inputId = entries[i];
 
         var formCheck = document.createElement("div");
         formCheck.classList.add("form-check");
@@ -187,7 +189,9 @@ export function populateCountryGroup(containerId, dialect, countrySelected, inpu
         checkBox.value = inputId;
         checkBox.id = inputId;
         checkBox.name = inputName;
-        checkBox.checked = true;
+        if(checked) {
+            checkBox.checked = true;
+        }
 
         label.setAttribute("for", inputId);
         label.appendChild(document.createTextNode(inputId));
@@ -197,12 +201,6 @@ export function populateCountryGroup(containerId, dialect, countrySelected, inpu
     }
 
 }
-
-export function populateFormalityGroup(containerId, dialectHeader, inputFormality, inputName) {
-    // console.log("DIALECT: "+ dialectHeader);
-    // console.log("FORMALITY: "+ inputFormality);
-}
-
 
 // Known issue in below function: 
 // If a checked box gets removed, and will be re-added, this value is lost. Need a way to preserve state or re-check boxes if they re-appear

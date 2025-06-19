@@ -4,6 +4,7 @@ import * as utils from './utils.js';
 var currentAccordion = 0; 
 var dataSourceArr = utils.pullData("Data Sources", "../data/data_sources.json");
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
+const baseContextList = ["Legal", "Educational", "Literature", "Academica", "News Media", "Spoken, conversational", "Social Media"];
 var langArr = utils.pullData("Languages", "../data/languages.json");
 
 class Dataset {
@@ -226,7 +227,8 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
             // Add to country list as we go through multiple dialects
             
-            utils.populateDialectHeader("inputDialect", Object.keys(langArr)[i], "dialect");
+            // Dialect currently has no header, consider adding?
+            // utils.populateHeader("inputDialect", Object.keys(langArr)[i], "dialect");
 
             for(var y=0; y<Object.keys(dialectArr).length; y++) {
                 var dialect = Object.keys(dialectArr)[y];
@@ -276,15 +278,50 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 document.getElementById("dialectSubmit").addEventListener("click", function(event){
     var parent = event.target.parentElement;
     var dialectNodes = parent.querySelectorAll(`[name*="dialect"]:checked`);
-    var dialectSelected = Array.from(dialectNodes).map(checkbox => checkbox.value);
-    var dialectCountries = langArr[d.lang_major].Dialects[dialectSelected[0]].Countries[0];
-    dialectCountries = dialectCountries.split(", ");
     
+    // Currently limiting to a single dialect for the demo, can expand later
+    var dialectSelected = Array.from(dialectNodes).map(checkbox => checkbox.value);
+
+    var headerFormality = "Suggested formality based on Dialects: " + dialectSelected[0];
+    // Since factory takes an array as input, and formality is a string. create an array with the single string.
+    var dialectFormality = [];
+    dialectFormality[0] = langArr[d.lang_major].Dialects[dialectSelected[0]].Formality;
+
+    var headerContext = "Social context based on Dialects: " + dialectSelected[0];
+    var dialectContext = langArr[d.lang_major].Dialects[dialectSelected[0]].Context;
+    // clear existing
     utils.removeChildOfClass("inputDialectBias","form-check");
-    utils.populateCountryGroup("inputDialectBias", dialectSelected[0], dialectCountries, "countries");
+
+    //populate new
+    utils.populateHeader("inputDialectBias", headerFormality, "formality");
+    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], dialectFormality, "formality", true);
+
+
+    utils.populateHeader("inputDialectBias", headerContext, "context");
+    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], dialectContext, "context", true);
+    
+    var unknownContexts = [] 
+    for (var i=0; i<baseContextList.length; i++){
+        if (!dialectContext.includes(baseContextList[i])){
+            unknownContexts.push(baseContextList[i]);
+        }
+    }
+    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], unknownContexts, "context", false);
+
 
     doCollapse(parent);
 });
+
+document.getElementById("dialectBiasSubmit").addEventListener("click", function(event){
+    var parent = event.target.parentElement;
+
+    //TODO update database accordingly
+
+    doCollapse(parent);
+});
+
+
+
 
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function
