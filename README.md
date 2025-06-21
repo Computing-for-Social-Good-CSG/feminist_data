@@ -10,14 +10,14 @@ There are several items that may be useful to researchers thinking about bias re
 2. Code for the Bias Reporting Tool.
    - We make the code available for two reasons: so that users of the tool have transparency on how the reports are generated, and so that others can fork or contribute to the tool. If you do fork our code, we ask you cite our repository.
 3. [Citation](#citation) (how to cite this work).
-4. [Inspiration / Other Paradigms](#inspiration-and-other-paradigms) 
+4. [Inspiration and other paradigms](#inspiration-and-other-paradigms) 
    - A list of other bias reporting paradigms that inform this work.
   
 ## How do I cite this work? 
 ### Citation 
 > Cass Mayeda, Arinjay Singh, Arnav Mahale, Laila Shereen Sakr, and Mai ElSherief. 2025. Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research. In * *The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT ’25), June 23–26, 2025, Athens, Greece* *. ACM, New York, NY, USA, 24 pages. https://doi.org/10.1145/3715275.3732119.
-**BibTeX:**
 
+###BibTeX:
 ```tex
 @inproceedings{mayeda-etal-2025-feminism-assess-NLP,
     title = "Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research",
@@ -26,11 +26,10 @@ There are several items that may be useful to researchers thinking about bias re
       Mahale, Arnav  and
       Shereen Sakr, Laila  and
       ElSherief, Mai",
-    booktitle = "The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT '25)",
-    month = june,
-    year = "2025",
-    address = "Athens, Greece",
-    publisher = "Association for Computational Linguistics"
+    booktitle = "The 2025 ACM Conference on Fairness, Accountability, and Transparency",
+    month = jun,
+    year = 2025,
+    publisher = "ACM"
 }
 ```
 ## Inspiration and other paradigms 
