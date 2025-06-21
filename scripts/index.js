@@ -2,10 +2,10 @@ import * as utils from './utils.js';
 
 // Global Variables
 var currentAccordion = 0; 
-var dataSourceArr = utils.pullData("Data Sources", "../data/data_sources.json");
+var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 const baseContextList = ["Legal", "Educational", "Literature", "Academica", "News Media", "Spoken, conversational", "Social Media"];
-var langArr = utils.pullData("Languages", "../data/languages.json");
+var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
 
 class Dataset {
     constructor () {
@@ -91,7 +91,7 @@ function doCollapse(buttonParent) {
 utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
 utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 
-// const countryArr = utils.pullData("Country", "../data/data.json");
+// const countryArr = utils.pullData("Country", "https://computing-for-social-good-csg.github.io/feminist_data/data/data.json");
 // utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
 
 // When Data Source is submitted, populate suggested biases 
