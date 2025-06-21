@@ -1,6 +1,6 @@
 # Bias Reporting Tool and Data Feminism Research Paper Dataset 
 
-[Read the Paper - TBD][Use the Bias Reporting Tool - TBD] 
+[Read the Paper - TBD][Use the Bias Reporting Tool](https://computing-for-social-good-csg.github.io/feminist_data/)
 
 ## What's in this repository? 
 There are several items that may be useful to researchers thinking about bias research and ethics reporting. 
