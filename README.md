@@ -17,7 +17,7 @@ There are several items that may be useful to researchers thinking about bias re
 ### Citation 
 > Cass Mayeda, Arinjay Singh, Arnav Mahale, Laila Shereen Sakr, and Mai ElSherief. 2025. Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research. In * *The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT ’25), June 23–26, 2025, Athens, Greece* *. ACM, New York, NY, USA, 24 pages. https://doi.org/10.1145/3715275.3732119.
 
-###BibTeX:
+***BibTeX:***
 ```tex
 @inproceedings{mayeda-etal-2025-feminism-assess-NLP,
     title = "Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research",
