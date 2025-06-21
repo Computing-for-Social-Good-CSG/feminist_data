@@ -9,10 +9,14 @@ There are several items that may be useful to researchers thinking about bias re
    - Please note this is a prototype, and there are several limitations (i.e. not every language and data source has detailed suggestions).
 2. Code for the Bias Reporting Tool.
    - We make the code available for two reasons: so that users of the tool have transparency on how the reports are generated, and so that others can fork or contribute to the tool. If you do fork our code, we ask you cite our repository.
-3. [Citation](#citation) (how to cite this work).
-4. [Inspiration and other paradigms](#inspiration-and-other-paradigms) 
+3. A [form](https://forms.gle/HE3HAQCotgwe11JA7) to suggest a citation to be added to the tool. 
+4. [Citation](#citation) (how to cite this work).
+5. [Inspiration and other paradigms](#inspiration-and-other-paradigms) 
    - A list of other bias reporting paradigms that inform this work.
   
+## Suggest a Citation 
+Use [this link](https://forms.gle/HE3HAQCotgwe11JA7) to suggest a new citation be added to the tool. 
+
 ## How do I cite this work? 
 **Citation**
 > Cass Mayeda, Arinjay Singh, Arnav Mahale, Laila Shereen Sakr, and Mai ElSherief. 2025. Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research. In * *The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT ’25), June 23–26, 2025, Athens, Greece* *. ACM, New York, NY, USA, 24 pages. https://doi.org/10.1145/3715275.3732119.
