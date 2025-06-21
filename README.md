@@ -8,13 +8,32 @@ There are several items that may be useful to researchers thinking about bias re
    - This tool is a form that dynamically adapts to your input to suggest different forms of potential bias in your dataset. It then summarizes the results in a standardized format. It's designed for Natural Langauge Processing (NLP) researchers and paper authors, but anyone can use it. 
    - Please note this is a prototype, and there are several limitations (i.e. not every language and data source has detailed suggestions).
 2. Code for the Bias Reporting Tool.
-   - The tool is built using the Bootstrap.
    - We make the code available for two reasons: so that users of the tool have transparency on how the reports are generated, and so that others can fork or contribute to the tool. If you do fork our code, we ask you cite our repository.
+3. [Citation](#citation) (how to cite this work).
+4. [Inspiration / Other Paradigms](#inspiration-and-other-paradigms) 
+   - A list of other bias reporting paradigms that inform this work.
   
 ## How do I cite this work? 
 ### Citation 
 > Cass Mayeda, Arinjay Singh, Arnav Mahale, Laila Shereen Sakr, and Mai ElSherief. 2025. Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research. In * *The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT ’25), June 23–26, 2025, Athens, Greece* *. ACM, New York, NY, USA, 24 pages. https://doi.org/10.1145/3715275.3732119.
-## Inspiration / Other Paradigms 
+**BibTeX:**
+
+```tex
+@inproceedings{mayeda-etal-2025-feminism-assess-NLP,
+    title = "Applying Data Feminism Principles to Assess Bias in English and Arabic NLP Research",
+    author = "Mayeda, Cass  and
+      Singh, Arinjay  and
+      Mahale, Arnav  and
+      Shereen Sakr, Laila  and
+      ElSherief, Mai",
+    booktitle = "The 2025 ACM Conference on Fairness, Accountability, and Transparency (FAccT '25)",
+    month = june,
+    year = "2025",
+    address = "Athens, Greece",
+    publisher = "Association for Computational Linguistics"
+}
+```
+## Inspiration and other paradigms 
 There are other bias reporting paradigms that we drew inspiration from in creating this tool. Often they are tailored to other types of datasets or models, or reporting contexts. Additionally, most still rely on paper authors to generate potential sources of bias, whereas our tool proactively suggests them.
 ### Unspecified Data Types 
 - [Dataset Nutrition Labels](https://labelmaker.datanutrition.org/) 
