@@ -1,3 +1,4 @@
+// All items are listed alphabetically (Languages, Dialects, and Countries)
 {
     "Languages":{
       "English":{
@@ -16,23 +17,40 @@
       "Arabic":{
         "Countries":{},
         "Dialects":{
-          "Modern Standard Arabic":{
+          "Classical Arabic":{
             "Countries":[],
-            "Context":["Legal", "Educational", "Literature", "Academica", "News Media"],
+            "Context":["Historical", "Poetry", "Religious (Qur'an)"],
             "Formality":"Formal"
           },
           "Egyptian Arabic":{
-            "Countries":["Egypt"],
-            "Context":["Spoken, conversational", "Social Media"],
-            "Formality":"Vernacular"
-          },
-          "Levantine Arabic":{
-            "Countries":["Syria", "Israel", "Jordan", "Lebanon", "Palestine", "Turkey"],
+            "Countries":["Egypt", "Sudan"],
+            "Context":["Social Media", "Spoken, conversational"],
             "Formality":"Vernacular"
           },
           "Gulf Arabic":{
-            "Countries":["Kuwait", "Iraq", "Qatar", "Saudi Arabia"],
+            "Countries":["Kuwait", "Qatar", "Saudi Arabia"],
+            "Context":["Social Media", "Spoken, conversational"],
             "Formality":"Vernacular"
+          },
+          "Iraqi":{
+            "Countries":["Iraq", "Kuwait", "Qatar", "Saudi Arabia"],
+            "Context":["Social Media", "Spoken, conversational"],
+            "Formality":"Vernacular"
+          },
+          "Levantine Arabic":{
+            "Countries":["Israel", "Jordan", "Lebanon", "Palestine", "Syria", "Turkey"],
+            "Context":["Social Media", "Spoken, conversational"],
+            "Formality":"Vernacular"
+          },
+          "Maghrebi":{
+            "Countries":["Algeria", "Libya", "Morocco", "Tunisia"],
+            "Context":["Social Media", "Spoken, conversational"],
+            "Formality":"Vernacular"
+          },
+          "Modern Standard Arabic":{
+            "Countries":[],
+            "Context":["Academica", "Education", "Law", "Literature", "News"],
+            "Formality":"Formal"
           }
         }
       },
