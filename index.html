@@ -68,9 +68,8 @@
 					</h2>
 					<div id="collapseLang" class="accordion-collapse collapse" aria-labelledby="headerLang" data-bs-parent="#headerLang">
 						<div name="lang" class="accordion-body">
-							<div id="inputLang">
-
-							</div>
+							<p class="help-text">Please select a major language group (sometimes called macro languages).</p>
+							<div id="inputLang"></div>
 							<button class="btn btn-secondary" type="button" name="submit" id="langSubmit">Submit</button>
 						</div>
 					</div>
@@ -84,26 +83,25 @@
 					</h2>
 					<div id="collapseDialect" class="accordion-collapse collapse" aria-labelledby="headerDialect" data-bs-parent="#headerDialect">
 						<div name="dialect" class="accordion-body">
-							<div id="inputDialect">
-
-							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="dialectSubmit">Submit</button>
+							<p class="help-text">If your dialect is more finely grained, you can further edit it and the country list in the next section.</p>
+							<div id="inputDialect"></div>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitDialect">Submit</button>
 						</div>
 					</div>
 				</div>
 
 				<div class="accordion-item">
-					<h2 class="accordion-header" id="headerDialectBias">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDialectBias" aria-expanded="false" aria-controls="collapseDialectBias">
-							Dialect Biases
+					<h2 class="accordion-header" id="headerCountry">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCountry" aria-expanded="false" aria-controls="collapseCountry">
+							Country
 						</button>
 					</h2>
-					<div id="collapseDialectBias" class="accordion-collapse collapse" aria-labelledby="headerDialectBias" data-bs-parent="#headerDialectBias">
-						<div name="dialectBias" class="accordion-body">
-							<div id="inputDialectBias">
+					<div id="collapseCountry" class="accordion-collapse collapse" aria-labelledby="headerCountry" data-bs-parent="#headerCountry">
+						<div name="country" class="accordion-body">
+							<div id="inputCountry">
 
 							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="dialectBiasSubmit">Submit</button>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitCountry">Submit</button>
 						</div>
 					</div>
 				</div>

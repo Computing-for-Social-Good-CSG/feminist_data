@@ -4,8 +4,11 @@ import * as utils from './utils.js';
 var currentAccordion = 0; 
 var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
-const baseContextList = ["Legal", "Educational", "Literature", "Academica", "News Media", "Spoken, conversational", "Social Media"];
-var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
+const baseContextList = ["Law", "Education", "Literature", "Academia", "News", "Spoken (conversation)", "Social Media"];
+
+// -- CHANGE BACK BEFORE PUSHING 
+// var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
+var langArr = utils.pullData("Languages", "data/languages.json");
 
 class Dataset {
     constructor () {
@@ -13,7 +16,7 @@ class Dataset {
         this.data_source = "";
         this.age = "";
         this.class = "";
-        this.lang_major = [];
+        this.lang_macro = [];
         this.lang_dialect = [];
         this.country_list = [];
         this.race = "";
@@ -87,17 +90,13 @@ function doCollapse(buttonParent) {
     }
 }
 
-// Populate initial form options
-utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
-utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
+// populate Data Source and Macro Languages 
+utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), null, "radio", "dataSource");
+utils.populateInputGroup("inputLang", Object.keys(langArr), null, "checkbox", "lang");
 
-// const countryArr = utils.pullData("Country", "https://computing-for-social-good-csg.github.io/feminist_data/data/data.json");
-// utils.populateInputGroup("checkboxContainer2", countryArr, "checkbox");
-
-// When Data Source is submitted, populate suggested biases 
+// when Data Source is submitted, populate suggested biases 
 document.getElementById("sourceSubmit").addEventListener("click", function(event){
     
-    // TODO if resubmitting, clear out all previous html elements
     var parent = event.target.parentElement;
     var empty = isEmpty(parent);
     if (empty) {
@@ -130,10 +129,10 @@ document.getElementById("sourceSubmit").addEventListener("click", function(event
             unknownBiasTitles.push(baseBiasList[i]);
         }
     }
-    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
+    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, null, "checkbox", "sourceBias");
 })
 
-// When data source biases are submitted, update database 
+// when Data Source Biases are submitted, update database 
 document.getElementById("sourceBiasSubmit").addEventListener("click", function(event){
 
     var parent = event.target.parentElement;
@@ -146,47 +145,32 @@ document.getElementById("sourceBiasSubmit").addEventListener("click", function(e
     doCollapse(parent);
 
     if (document.getElementById("Age").checked){
-        d.age = updateBias("Age");
+        d.age = utils.updateBias("Age");
     } 
     if (document.getElementById("Country").checked){
-        d.country_list = updateBias("Country");
+        d.country_list = utils.updateBias("Country");
     }
     if (document.getElementById("Language").checked){
-        d.lang_major = updateBias("Language");
+        d.lang_macro = utils.updateBias("Language");
     }
     if (document.getElementById("Race").checked){
-        d.race = updateBias("Race");
+        d.race = utils.updateBias("Race");
     }
     if (document.getElementById("Socioeconomic Class").checked){
-        d.class = updateBias("Socioeconomic Class");
+        d.class = utils.updateBias("Socioeconomic Class");
     }
 });
 
-// Known issue in below function: 
-// var str = formCheck.querySelector(".cite-text").textContent;
-// When checking the boxes below citations, such as "Race" a null read error occurs
-// Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
-
-function updateBias(biasTitle){
-    var formCheck = document.getElementById(biasTitle).parentElement;
-    var str = formCheck.querySelector(".cite-text").textContent;
-    return(str.substring(3, str.length));
-};
-
-var countryAll = [];
-
-document.getElementById("langSubmit").addEventListener("click", function(event){
-
-    // Language button was clicked, update dialect box using chosen language and dialect data stored
+// when Macro Language submitted, update Dialect options
+document.getElementById("langSubmit").addEventListener("click", function(event) {
 
     var parent = event.target.parentElement;
     var parentName = parent.getAttribute("name");
     var empty = isEmpty(parent);
 
-    // Cleaning up divs that get populated from this action
-    // TODO utils.removeChildOfClass("inputDialect","SOME HEADER CLASS");
+    // clean up divs populated from this action (in resubmitted)
     utils.removeChildOfClass("inputDialect","form-check");
-    // TODO utils.removeChildOfClass("inputCountry","SOME CLASS");
+    utils.removeChildOfClass("inputDialect", "suggested-header");
 
     // lang is blacklisted, so this requires an input checked to progress
     if (empty) {
@@ -196,110 +180,94 @@ document.getElementById("langSubmit").addEventListener("click", function(event){
 
     doCollapse(parent);
 
-    //TODO update Dataset
+    // get list of selected Macro Languages 
     var langsChecked = [];
     var formList = parent.querySelectorAll(`[name*="${parentName}"]`);
-
     for(var i=0; i<formList.length; i++) {
         if (formList[i].checked) {
             langsChecked.push(formList[i].value);
         }
     }
-    // Not using set as that was not made for arrays
-    // No null check is needed if we detect selections were made
-    d.lang_major = langsChecked;
+    d.lang_macro = langsChecked;
 
-    // clear countries list in case of resubmission 
-    countryAll = [];
+    // populate Dialects based on Macro Languages 
+    for(var i=0; i<d.lang_macro.length; i++) {
 
-    //TODO populate dialect section
-    // To best populate dialect section, we may need to iterate through one at a time until we find our matches...
-    for(var i=0; i<Object.keys(langArr).length; i++) {
-        if(d.lang_major.includes(Object.keys(langArr)[i])) {
-
-            if (!Object.values(langArr)[i].hasOwnProperty("Dialects")) {
-                // no dialect data, break out early
-                // console.log("No dialects, exit early");
-                continue;
-            }
-
-            // Using match, create sub boxes for each dialect
-            var dialectArr = Object.values(langArr)[i].Dialects;
-
-            // Add to country list as we go through multiple dialects
-            
-            // Dialect currently has no header, consider adding?
-            // utils.populateHeader("inputDialect", Object.keys(langArr)[i], "dialect");
-
-            for(var y=0; y<Object.keys(dialectArr).length; y++) {
-                var dialect = Object.keys(dialectArr)[y];
-                var formality = Object.values(dialectArr)[y].Formality;;
-                var countrySublist = Object.values(dialectArr)[y].Countries;
-
-                // At this level we have each dialect object. and are iterating the indeces which sh             
-
-                utils.populateDialectGroup("inputDialect", dialect, "dialect");
-
-
-                if (!Object.values(dialectArr)[y].hasOwnProperty("Countries")) {
-                    // no dialect data, break out early
-                    console.log("Dialects, but no Countries, exit early");
-                    continue;
-                }
-
-                // loop through list of countries, if it doesn't exist in all list, add it
-                for(var x=0; x<countrySublist.length; x++) {
-                    if (!countryAll.includes(countrySublist[x])) {
-                        countryAll.push(countrySublist[x]);
-                    }
-                }
-
-                if (!Object.values(dialectArr)[y].hasOwnProperty("Formality")) {
-                    // no dialect data, break out early
-                    console.log("Dialects, but no Formality, exit early");
-                    continue;
-                }
-
-                // TODO Formality desires are vague, but should do here
-                // Not sure if we want a checkbox, or if we want some other input format with this answer as a given. Multiple choice radios, etc...
-                // utils.populateFormalityGroup("inputFormality", dialect, formality, "formality");
-
-            }
-
-            // TODO Populate all countries now that we have iterated through all dialects
-            // Might want to sort alphabetically at some point
-            // utils.populateCountryGroup("inputCountry", countryAll, "country");
-
+        // no dialect data, break out early 
+        if (!langArr[d.lang_macro[i]].hasOwnProperty("Dialects")) {
+            var headerText = "No suggested dialects for the language: " + d.lang_macro[i];
+            utils.populateSuggestedHeader("inputDialect", headerText);
+            continue; 
         }
-    }
 
+        var headerText = "Suggested dialects based on the language: " + d.lang_macro[i];
+        utils.populateSuggestedHeader("inputDialect", headerText);
 
+        var dialectArr = langArr[d.lang_macro[i]].Dialects;
+        var dialectCountries = [];
+        for (var y=0; y<Object.keys(dialectArr).length; y++) {
+            var countrySublist = Object.values(dialectArr)[y].Countries; 
+            dialectCountries[y] = countrySublist;
+        }
+        utils.populateInputGroup("inputDialect", Object.keys(dialectArr), null, "checkbox", "dialect", dialectCountries, "Associated Countries: ");
+    } 
 });
 
-document.getElementById("dialectSubmit").addEventListener("click", function(event){
+document.getElementById("submitDialect").addEventListener("click", function(event){
     var parent = event.target.parentElement;
     var dialectNodes = parent.querySelectorAll(`[name*="dialect"]:checked`);
-    
-    // Currently limiting to a single dialect for the demo, can expand later
     var dialectSelected = Array.from(dialectNodes).map(checkbox => checkbox.value);
+    var container = document.getElementById("inputCountry");
+
+    // generate help text 
+    var p = document.createElement("p");
+    p.classList.add("suggested-heading");
+    if (dialectNodes.length > 0) {
+        p.textContent = 'These countries are suggested based on your selected dialects: ' + dialectSelected.join(", ");
+    } else {
+        p.textContent = 'Please indicate the countries where your dataset came from. I.e. where the people who generated the data live.'
+    }
+    container.appendChild(p);
+
+    // get list of suggested countries based on dialect 
+    var suggestedCountries = [];
+    for (var x=0; x<dialectSelected.length; x++) {
+        suggestedCountries.push(langArr[d.lang_macro].Dialects[dialectSelected[x]]);
+    }
+
+    // populate list of countries 
+    var countryAll = langArr[d.lang_macro].Countries;
+    utils.populateBiasGroup("inputCountry", countryAll, suggestedCountries, "country");
+
+    doCollapse(parent);
+});
+
+document.getElementById("submitCountry").addEventListener("click", function(event){
+    var parent = event.target.parentElement;
+
+    //TODO update database accordingly
+
+    // Currently limiting to a single dialect for the demo, can expand later
+
+
 
     var headerFormality = "Suggested formality based on Dialects: " + dialectSelected[0];
     // Since factory takes an array as input, and formality is a string. create an array with the single string.
     var dialectFormality = [];
-    dialectFormality[0] = langArr[d.lang_major].Dialects[dialectSelected[0]].Formality;
+    dialectFormality[0] = langArr[d.lang_macro].Dialects[dialectSelected[0]].Formality;
 
     var headerContext = "Social context based on Dialects: " + dialectSelected[0];
-    var dialectContext = langArr[d.lang_major].Dialects[dialectSelected[0]].Context;
+    var dialectContext = langArr[d.lang_macro].Dialects[dialectSelected[0]].Context;
     // clear existing
-    utils.removeChildOfClass("inputDialectBias","form-check");
+    utils.removeChildOfClass("inputCountry","form-check");
 
     //populate new
-    utils.populateHeader("inputDialectBias", headerFormality, "formality");
-    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], dialectFormality, "formality", true);
+    utils.populateHeader("inputCountry", headerFormality, "formality");
+    // utils.populateBiasGroup("inputCountry", dialectSelected[0], dialectFormality, "formality", true);
 
 
-    utils.populateHeader("inputDialectBias", headerContext, "context");
-    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], dialectContext, "context", true);
+    utils.populateHeader("inputCountry", headerContext, "context");
+    // utils.populateBiasGroup("inputCountry", dialectSelected[0], dialectContext, "context", true);
     
     var unknownContexts = [] 
     for (var i=0; i<baseContextList.length; i++){
@@ -307,16 +275,7 @@ document.getElementById("dialectSubmit").addEventListener("click", function(even
             unknownContexts.push(baseContextList[i]);
         }
     }
-    utils.populateBiasGroup("inputDialectBias", dialectSelected[0], unknownContexts, "context", false);
-
-
-    doCollapse(parent);
-});
-
-document.getElementById("dialectBiasSubmit").addEventListener("click", function(event){
-    var parent = event.target.parentElement;
-
-    //TODO update database accordingly
+    // utils.populateBiasGroup("inputCountry", dialectSelected[0], unknownContexts, "context", false);
 
     doCollapse(parent);
 });

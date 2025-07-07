@@ -53,120 +53,110 @@ export function pullData(key, jsonPath){
     return my_JSON_object[key];
 }
 
-// creates a group of inputs given the container, list of items, and type 
-export function populateInputGroup(containerId, inputList, inputType, inputName) {
+// Known issue in below function: 
+// var str = formCheck.querySelector(".cite-text").textContent;
+// When checking the boxes below citations, such as "Race" a null read error occurs
+// Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
 
-    // For each entry, create an element
-    for (var i=0; i<inputList.length; i++)
-    {
-        inputFactory(inputList[i], containerId, inputType, inputName);
+function updateBias(biasTitle){
+    var formCheck = document.getElementById(biasTitle).parentElement;
+    var str = formCheck.querySelector(".cite-text").textContent;
+    return(str.substring(3, str.length));
+};
+
+// creates a group of inputs 
+export function populateInputGroup(containerId, allItems, selectedItems, inputType, inputName, helpItem, helpPrefix) {
+
+    // TODO update to handle selected items 
+
+    for (var i=0; i<allItems.length; i++) {
+        if (helpItem) {
+            inputFactory(containerId, allItems[i], inputType, inputName, null, helpItem[i], helpPrefix);
+        } else {
+            inputFactory(containerId, allItems[i], inputType, inputName, null);
+        }
     }
 }
 
-// creates an HTML input object 
-export function inputFactory(inputId, containerId, inputType, inputName){
+// creates an single HTML input object 
+export function inputFactory(containerId, inputId, inputType, inputName, selected, helpItem, helpPrefix){
 
     var container = document.getElementById(containerId);
-    var formCheck = document.createElement("div")
+
+    var formCheck = document.createElement("div");
     formCheck.classList.add("form-check");
+    container.appendChild(formCheck);
+
     var checkBox = document.createElement('input');
     checkBox.classList.add("form-check-input");
-    var label = document.createElement('label');
-    label.classList.add("form-check-label");
-
     checkBox.type = inputType;
     checkBox.value = inputId;
     checkBox.id = inputId;
-    label.setAttribute("for", inputId);
-
-    // if it's a radio button, set the name attribute (prevents duplicate selection) 
-    // if (inputType == "radio") {
-    checkBox.name = inputName; // Always setting name currently, no downside
-    // }
-
-    label.appendChild(document.createTextNode(inputId));
-    container.appendChild(formCheck);
+    checkBox.name = inputName;
+    if (selected == true) {
+        checkBox.checked = true;
+    }
     formCheck.appendChild(checkBox);
+
+    var label = document.createElement('label');
+    label.classList.add("form-check-label");
+    label.setAttribute("for", inputId);
+    label.appendChild(document.createTextNode(inputId));
     formCheck.appendChild(label);
+
+    // create help text 
+    if (helpItem || helpPrefix) {
+        var helpText = document.createElement('p');
+        if (helpPrefix) {
+            helpText.innerText = helpPrefix;
+        }
+        if (typeof helpItem == 'undefined') {
+            helpText.innerText += ' none';
+        } else {
+            helpText.innerText += helpItem.join(', ');
+        }
+        helpText.classList.add("help-title");
+        formCheck.appendChild(helpText);
+    }
+
+    return formCheck;
 }
 
 // creates group of HTML objects with bias citation links 
 export function populateCiteGroup(containerId, inputList, inputContent, inputName){
 
+    var container = document.getElementById(containerId);
+
     for (var i=0; i<inputList.length; i++){
         if (i%3 == 0){
-            var inputId = inputList[i];
-            var container = document.getElementById(containerId);
-            var formCheck = document.createElement("div")
-            formCheck.classList.add("form-check");
-            var checkBox = document.createElement('input');
-            checkBox.classList.add("form-check-input");
-            var label = document.createElement('label');
-            label.classList.add("form-check-label");
-            var citeText = document.createElement("p");
-            var link = document.createElement("a");
+            var formCheck = inputFactory(containerId, inputList[i], "checkbox", inputName, true);
 
-            checkBox.type = "checkbox";
-            checkBox.value = inputId;
-            checkBox.id = inputId;
-            checkBox.checked = true;
-            checkBox.name = inputName;
+            var citeText = document.createElement("p");
             citeText.textContent = " : " + inputContent[i];
             citeText.classList.add("cite-text");
+            formCheck.appendChild(citeText);
+
+            var link = document.createElement("a");
             link.textContent = inputContent[i+1];
             link.setAttribute("href", inputContent[i+2]);
             link.classList.add("cite-link");
-            label.setAttribute("for", inputId);
-
-            label.appendChild(document.createTextNode(inputId));
-            container.appendChild(formCheck);
-            formCheck.appendChild(checkBox);
-            formCheck.appendChild(label);
-            formCheck.appendChild(citeText);
             formCheck.appendChild(link);
         }        
     }
 }
 
-export function populateDialectGroup(containerId, inputDialect, inputName) {
-    // console.log("DIALECT: "+ inputDialect);
-   
-        var container = document.getElementById(containerId);
-        var formCheck = document.createElement("div")
-        formCheck.classList.add("form-check");
-        var checkBox = document.createElement('input');
-        checkBox.classList.add("form-check-input");
-        var label = document.createElement('label');
-        label.classList.add("form-check-label");
-
-        checkBox.type = "checkbox";
-        checkBox.value = inputDialect;
-        checkBox.id = inputDialect;
-        checkBox.checked = false;
-        checkBox.name = inputName;
-
-        label.setAttribute("for", inputDialect);
-
-        label.appendChild(document.createTextNode(inputDialect));
-        container.appendChild(formCheck);
-        formCheck.appendChild(checkBox);
-        formCheck.appendChild(label);
-}
-
-// General header addition given container
-export function populateHeader(containerId, text, inputName) {
-
+// creates a header for suggested items 
+export function populateSuggestedHeader(containerId, text) {
     var container = document.getElementById(containerId);
-    var h6 = document.createElement("h6");
-    h6.classList.add("suggested-heading");
-    h6.textContent = text;
-    h6.name = inputName;
-    container.appendChild(h6);
+    var header = document.createElement("h6");
+    header.innerText = text;
+    header.classList.add("suggested-header");
+    container.appendChild(header);
 }
 
 // TODO add a parameter to populateInputGroup to have a box checked or not and remove this function 
 // TODO this can be renamed as a checkbox factory or similar, not specific to biasGroup
-export function populateBiasGroup(containerId, dialect, entries, inputName, checked) {
+export function populateBiasGroup(containerId, entries, selected, inputName) {
     
     // TODO list all countries, but only have the suggested ones selected 
     // -- the dialect country lists need to be parsed into a single large array 
@@ -175,30 +165,36 @@ export function populateBiasGroup(containerId, dialect, entries, inputName, chec
 
     var container = document.getElementById(containerId);
 
-    for (var i=0; i<entries.length; i++){
-        var inputId = entries[i];
-
-        var formCheck = document.createElement("div");
-        formCheck.classList.add("form-check");
-        var checkBox = document.createElement('input');
-        checkBox.classList.add("form-check-input");
-        var label = document.createElement('label');
-        label.classList.add("form-check-label");
-
-        checkBox.type = "checkbox";
-        checkBox.value = inputId;
-        checkBox.id = inputId;
-        checkBox.name = inputName;
-        if(checked) {
-            checkBox.checked = true;
-        }
-
-        label.setAttribute("for", inputId);
-        label.appendChild(document.createTextNode(inputId));
-        container.appendChild(formCheck);
-        formCheck.appendChild(checkBox);
-        formCheck.appendChild(label);
+    // populate selected elements 
+    for (var i=0; i<selected.length; i++) {
+        inputFactory(selected[i], containerId, "checkbox", "country");
     }
+
+
+    // for (var i=0; i<entries.length; i++) {
+    //     var inputId = entries[i];
+
+    //     var formCheck = document.createElement("div");
+    //     formCheck.classList.add("form-check");
+    //     var checkBox = document.createElement('input');
+    //     checkBox.classList.add("form-check-input");
+    //     var label = document.createElement('label');
+    //     label.classList.add("form-check-label");
+
+    //     checkBox.type = "checkbox";
+    //     checkBox.value = inputId;
+    //     checkBox.id = inputId;
+    //     checkBox.name = inputName;
+    //     // if(selected) {
+    //     //     checkBox.checked = true;
+    //     // }
+
+    //     label.setAttribute("for", inputId);
+    //     label.appendChild(document.createTextNode(inputId));
+    //     container.appendChild(formCheck);
+    //     formCheck.appendChild(checkBox);
+    //     formCheck.appendChild(label);
+    // }
 
 }
 
