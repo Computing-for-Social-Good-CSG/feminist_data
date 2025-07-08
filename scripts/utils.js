@@ -58,28 +58,25 @@ export function pullData(key, jsonPath){
 // When checking the boxes below citations, such as "Race" a null read error occurs
 // Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
 
-function updateBias(biasTitle){
+export function updateBias(biasTitle){
     var formCheck = document.getElementById(biasTitle).parentElement;
     var str = formCheck.querySelector(".cite-text").textContent;
     return(str.substring(3, str.length));
 };
 
 // creates a group of inputs 
-export function populateInputGroup(containerId, allItems, selectedItems, inputType, inputName, helpItem, helpPrefix) {
-
-    // TODO update to handle selected items 
-
-    for (var i=0; i<allItems.length; i++) {
+export function populateInputGroup(containerId, inputItems, inputType, inputName, helpItem, helpPrefix, selected) {
+    for (var i=0; i<inputItems.length; i++) {
         if (helpItem) {
-            inputFactory(containerId, allItems[i], inputType, inputName, null, helpItem[i], helpPrefix);
+            inputFactory(containerId, inputItems[i], inputType, inputName, helpItem[i], helpPrefix, selected);
         } else {
-            inputFactory(containerId, allItems[i], inputType, inputName, null);
+            inputFactory(containerId, inputItems[i], inputType, inputName, null, null, selected);
         }
     }
 }
 
 // creates an single HTML input object 
-export function inputFactory(containerId, inputId, inputType, inputName, selected, helpItem, helpPrefix){
+export function inputFactory(containerId, inputId, inputType, inputName, helpItem, helpPrefix, selected) {
 
     var container = document.getElementById(containerId);
 
@@ -129,7 +126,7 @@ export function populateCiteGroup(containerId, inputList, inputContent, inputNam
 
     for (var i=0; i<inputList.length; i++){
         if (i%3 == 0){
-            var formCheck = inputFactory(containerId, inputList[i], "checkbox", inputName, true);
+            var formCheck = inputFactory(containerId, inputList[i], "checkbox", inputName, null, null, true);
 
             var citeText = document.createElement("p");
             citeText.textContent = " : " + inputContent[i];
@@ -152,50 +149,6 @@ export function populateSuggestedHeader(containerId, text) {
     header.innerText = text;
     header.classList.add("suggested-header");
     container.appendChild(header);
-}
-
-// TODO add a parameter to populateInputGroup to have a box checked or not and remove this function 
-// TODO this can be renamed as a checkbox factory or similar, not specific to biasGroup
-export function populateBiasGroup(containerId, entries, selected, inputName) {
-    
-    // TODO list all countries, but only have the suggested ones selected 
-    // -- the dialect country lists need to be parsed into a single large array 
-    // console.log("ALL COUNTRY LIST: "+ countryList);
-    // console.log(countryList.length);
-
-    var container = document.getElementById(containerId);
-
-    // populate selected elements 
-    for (var i=0; i<selected.length; i++) {
-        inputFactory(selected[i], containerId, "checkbox", "country");
-    }
-
-
-    // for (var i=0; i<entries.length; i++) {
-    //     var inputId = entries[i];
-
-    //     var formCheck = document.createElement("div");
-    //     formCheck.classList.add("form-check");
-    //     var checkBox = document.createElement('input');
-    //     checkBox.classList.add("form-check-input");
-    //     var label = document.createElement('label');
-    //     label.classList.add("form-check-label");
-
-    //     checkBox.type = "checkbox";
-    //     checkBox.value = inputId;
-    //     checkBox.id = inputId;
-    //     checkBox.name = inputName;
-    //     // if(selected) {
-    //     //     checkBox.checked = true;
-    //     // }
-
-    //     label.setAttribute("for", inputId);
-    //     label.appendChild(document.createTextNode(inputId));
-    //     container.appendChild(formCheck);
-    //     formCheck.appendChild(checkBox);
-    //     formCheck.appendChild(label);
-    // }
-
 }
 
 // Known issue in below function: 

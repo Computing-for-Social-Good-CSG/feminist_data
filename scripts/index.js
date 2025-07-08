@@ -91,104 +91,86 @@ function doCollapse(buttonParent) {
 }
 
 // populate Data Source and Macro Languages 
-utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), null, "radio", "dataSource");
-utils.populateInputGroup("inputLang", Object.keys(langArr), null, "checkbox", "lang");
+utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
+utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 
 // when Data Source is submitted, populate suggested biases 
 document.getElementById("sourceSubmit").addEventListener("click", function(event){
     
+    // PATTERN -- for every submit button 
+    // remove existing items (in case of resubmission)
+    utils.removeChildOfClass("inputSourceBias","form-check");
+    utils.removeChildOfClass("inputSourceBias", "suggested-header");
+    // get parent item (use later to check empty selection and collapse accordion) 
     var parent = event.target.parentElement;
+    // update data object 
+    d.data_source = document.querySelector('input[name="dataSource"]:checked').value;
+
+    // check for input to progress 
     var empty = isEmpty(parent);
     if (empty) {
         console.log("No selection, not taking any action")
         return;
     }
 
-    doCollapse(parent);
-
-    d.data_source = document.querySelector('input[name="dataSource"]:checked').value;
+    // populate known biases
+    var headerText = "Suggested biases based on the source: " + d.data_source;
+    utils.populateSuggestedHeader("inputSourceBias", headerText); 
     var sourceArr = dataSourceArr[d.data_source];
-    var knownBiasKeys = Object.keys(sourceArr);
-
-    // find known biases from JSON file
+    var knownBiasKeys = Object.keys(sourceArr);     
     var knownBiasTitles = []
     for (var i=0; i<knownBiasKeys.length; i++){
         if (i%3 == 0){
             knownBiasTitles.push(knownBiasKeys[i]);
         }
     }
-
-    // create HTML for known biases 
-    utils.removeChildOfClass("inputSourceBias","form-check");
     utils.populateCiteGroup("inputSourceBias", knownBiasKeys, Object.values(sourceArr), "sourceBias");
 
-    // populate unchecked blanks for the rest
+    // populate possible, unknown biases 
     var unknownBiasTitles = [] 
     for (var i=0; i<baseBiasList.length; i++){
         if (!knownBiasTitles.includes(baseBiasList[i])){
             unknownBiasTitles.push(baseBiasList[i]);
         }
     }
-    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, null, "checkbox", "sourceBias");
+    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
+    doCollapse(parent);
 })
 
 // when Data Source Biases are submitted, update database 
-document.getElementById("sourceBiasSubmit").addEventListener("click", function(event){
-
+document.getElementById("sourceBiasSubmit").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
-    var empty = isEmpty(parent);
-    if (empty) {
-        console.log("No selection, not taking any action")
-        return;
-    }
-
-    doCollapse(parent);
-
-    if (document.getElementById("Age").checked){
+    if (document.getElementById("Age").checked) {
         d.age = utils.updateBias("Age");
     } 
-    if (document.getElementById("Country").checked){
+    if (document.getElementById("Country").checked) {
         d.country_list = utils.updateBias("Country");
     }
-    if (document.getElementById("Language").checked){
+    if (document.getElementById("Language").checked) {
         d.lang_macro = utils.updateBias("Language");
     }
-    if (document.getElementById("Race").checked){
+    if (document.getElementById("Race").checked) {
         d.race = utils.updateBias("Race");
     }
-    if (document.getElementById("Socioeconomic Class").checked){
+    if (document.getElementById("Socioeconomic Class").checked) {
         d.class = utils.updateBias("Socioeconomic Class");
     }
+    doCollapse(parent);
 });
 
 // when Macro Language submitted, update Dialect options
 document.getElementById("langSubmit").addEventListener("click", function(event) {
-
-    var parent = event.target.parentElement;
-    var parentName = parent.getAttribute("name");
-    var empty = isEmpty(parent);
-
-    // clean up divs populated from this action (in resubmitted)
     utils.removeChildOfClass("inputDialect","form-check");
     utils.removeChildOfClass("inputDialect", "suggested-header");
-
-    // lang is blacklisted, so this requires an input checked to progress
+    var parent = event.target.parentElement;
+    var langNodes = parent.querySelectorAll(`[name*="lang"]:checked`);
+    d.lang_macro = Array.from(langNodes).map(checkbox => checkbox.value);
+    
+    var empty = isEmpty(parent);
     if (empty) {
         console.log("No selection, not taking any action")
         return;
     }
-
-    doCollapse(parent);
-
-    // get list of selected Macro Languages 
-    var langsChecked = [];
-    var formList = parent.querySelectorAll(`[name*="${parentName}"]`);
-    for(var i=0; i<formList.length; i++) {
-        if (formList[i].checked) {
-            langsChecked.push(formList[i].value);
-        }
-    }
-    d.lang_macro = langsChecked;
 
     // populate Dialects based on Macro Languages 
     for(var i=0; i<d.lang_macro.length; i++) {
@@ -202,46 +184,73 @@ document.getElementById("langSubmit").addEventListener("click", function(event) 
 
         var headerText = "Suggested dialects based on the language: " + d.lang_macro[i];
         utils.populateSuggestedHeader("inputDialect", headerText);
-
         var dialectArr = langArr[d.lang_macro[i]].Dialects;
         var dialectCountries = [];
         for (var y=0; y<Object.keys(dialectArr).length; y++) {
             var countrySublist = Object.values(dialectArr)[y].Countries; 
             dialectCountries[y] = countrySublist;
         }
-        utils.populateInputGroup("inputDialect", Object.keys(dialectArr), null, "checkbox", "dialect", dialectCountries, "Associated Countries: ");
-    } 
+        utils.populateInputGroup("inputDialect", Object.keys(dialectArr), "checkbox", "dialect", dialectCountries, "Associated Countries: ");
+    }
+    doCollapse(parent); 
 });
 
+// when Dialects are submitted, populate list of Countries 
 document.getElementById("submitDialect").addEventListener("click", function(event){
+    utils.removeChildOfClass("inputCountry","form-check");
+    utils.removeChildOfClass("inputCountry", "suggested-header");
     var parent = event.target.parentElement;
     var dialectNodes = parent.querySelectorAll(`[name*="dialect"]:checked`);
-    var dialectSelected = Array.from(dialectNodes).map(checkbox => checkbox.value);
-    var container = document.getElementById("inputCountry");
+    d.lang_dialect = Array.from(dialectNodes).map(checkbox => checkbox.value);
 
-    // generate help text 
-    var p = document.createElement("p");
-    p.classList.add("suggested-heading");
-    if (dialectNodes.length > 0) {
-        p.textContent = 'These countries are suggested based on your selected dialects: ' + dialectSelected.join(", ");
-    } else {
-        p.textContent = 'Please indicate the countries where your dataset came from. I.e. where the people who generated the data live.'
+    // loop through macro languages 
+    for (var x=0; x<d.lang_macro.length; x++) {
+
+        // no country data for the language, break out early 
+        if (!langArr[d.lang_macro[x]].hasOwnProperty("Countries")) {
+            var headerText = "No suggested countries for the language: " + d.lang_macro[x];
+            utils.populateSuggestedHeader("inputCountry", headerText);
+            continue; 
+        } else {
+            var langCountries = langArr[d.lang_macro[x]].Countries;
+
+            // populate suggested Countries
+            var dialectsInLang = []
+            var suggestedCountries = [];
+            for (var i=0; i<d.lang_dialect.length; i++) {
+
+                // if the dialect exists in this language 
+                var listDialects = Object.keys(langArr[d.lang_macro[x]].Dialects);
+                if (listDialects.includes(d.lang_dialect[i])) {
+                    dialectsInLang = dialectsInLang.concat(d.lang_dialect[i]);
+                    if (langArr[d.lang_macro[x]].Dialects[d.lang_dialect[i]].Countries) {
+                        suggestedCountries = suggestedCountries.concat(langArr[d.lang_macro[x]].Dialects[d.lang_dialect[i]].Countries);
+                    }
+                }
+            }
+            var headerText = "Suggested countries based on the dialect(s): " + dialectsInLang.join(", ");
+            utils.populateSuggestedHeader("inputCountry", headerText);
+            suggestedCountries.sort();
+            suggestedCountries = [... new Set(suggestedCountries)];
+            utils.populateInputGroup("inputCountry", suggestedCountries, "checkbox", "countries", null, null, true);
+
+            // populate all other Countries of language
+            var headerText = "Other countries based on the language: " + d.lang_macro[x];
+            utils.populateSuggestedHeader("inputCountry", headerText);
+            var otherCountries = [];
+            for (var i=0; i<langCountries.length; i++) {
+                if (!suggestedCountries.includes(langCountries[i])) {
+                    otherCountries.push(langCountries[i]);
+                }
+            }
+            otherCountries.sort();
+            utils.populateInputGroup("inputCountry", otherCountries, "checkbox", "countries"); 
+        }
     }
-    container.appendChild(p);
-
-    // get list of suggested countries based on dialect 
-    var suggestedCountries = [];
-    for (var x=0; x<dialectSelected.length; x++) {
-        suggestedCountries.push(langArr[d.lang_macro].Dialects[dialectSelected[x]]);
-    }
-
-    // populate list of countries 
-    var countryAll = langArr[d.lang_macro].Countries;
-    utils.populateBiasGroup("inputCountry", countryAll, suggestedCountries, "country");
-
     doCollapse(parent);
 });
 
+// when Countries are submitted, populate Conversation Contexts and Formality 
 document.getElementById("submitCountry").addEventListener("click", function(event){
     var parent = event.target.parentElement;
 

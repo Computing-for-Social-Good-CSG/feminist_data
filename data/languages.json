@@ -1,14 +1,24 @@
 {
     "Languages":{
-      "English":{
-        "Countries":{}
-      },
+      "English":{},
       "Chinese":{
-        "Countries":{},
+        "Countries":["China"],
         "Dialects":{
-          "Mandarin":{},
-          "Cantonese":{},
-          "Wu":{}
+          "Mandarin":{
+            "Countries":["China"],
+            "Context":["Education"],
+            "Formality":"Formal"
+          },
+          "Cantonese (Yue)":{
+            "Countries":["China","Hong Kong", "Macao"],
+            "Context":["Education", "Spoken, conversational"],
+            "Formality":{}  
+          },
+          "Wu":{
+            "Countries":["China","Hong Kong", "Macao"],
+            "Context":["Spoken, conversational"],
+            "Formality":{}              
+          }
         }
       },
       "Hindi":{},
@@ -74,6 +84,5 @@
       "Telugu":{},
       "Hausa":{},
       "Turkish":{}
-    },
-    "Country": ["Spain","Australia","Monaco"]
+    }
 }
