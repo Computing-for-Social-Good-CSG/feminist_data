@@ -28,7 +28,7 @@
           "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia", "Turkey", "United Arab Emirates", "Yemen"],
         "Dialects":{
           "Classical Arabic":{
-            "Context":["Historical", "Poetry", "Religious (Qur'an)"],
+            "Context":["Historical", "Literature", "Religious"],
             "Formality":"Formal"
           },
           "Egyptian Arabic":{
@@ -57,7 +57,7 @@
             "Formality":"Vernacular"
           },
           "Modern Standard Arabic":{
-            "Context":["Academica", "Education", "Law", "Literature", "News"],
+            "Context":["Academia", "Education", "Law", "Literature", "News"],
             "Formality":"Formal"
           },
           "Yemeni Arabic":{
