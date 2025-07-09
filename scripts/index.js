@@ -95,7 +95,7 @@ utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio",
 utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 
 // when Data Source is submitted, populate suggested biases 
-document.getElementById("sourceSubmit").addEventListener("click", function(event){
+document.getElementById("submitSource").addEventListener("click", function(event){
     
     // PATTERN -- for every submit button 
     // remove existing items (in case of resubmission)
@@ -138,7 +138,7 @@ document.getElementById("sourceSubmit").addEventListener("click", function(event
 })
 
 // when Data Source Biases are submitted, update database 
-document.getElementById("sourceBiasSubmit").addEventListener("click", function(event) {
+document.getElementById("submitSourceBias").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
     if (document.getElementById("Age").checked) {
         d.age = utils.updateBias("Age");
@@ -159,7 +159,7 @@ document.getElementById("sourceBiasSubmit").addEventListener("click", function(e
 });
 
 // when Macro Language submitted, update Dialect options
-document.getElementById("langSubmit").addEventListener("click", function(event) {
+document.getElementById("submitLang").addEventListener("click", function(event) {
     utils.removeChildOfClass("inputDialect","form-check");
     utils.removeChildOfClass("inputDialect", "suggested-header");
     var parent = event.target.parentElement;
@@ -272,19 +272,15 @@ document.getElementById("submitCountry").addEventListener("click", function(even
 
     //populate new
     utils.populateHeader("inputCountry", headerFormality, "formality");
-    // utils.populateBiasGroup("inputCountry", dialectSelected[0], dialectFormality, "formality", true);
-
-
+ 
     utils.populateHeader("inputCountry", headerContext, "context");
-    // utils.populateBiasGroup("inputCountry", dialectSelected[0], dialectContext, "context", true);
-    
+
     var unknownContexts = [] 
     for (var i=0; i<baseContextList.length; i++){
         if (!dialectContext.includes(baseContextList[i])){
             unknownContexts.push(baseContextList[i]);
         }
     }
-    // utils.populateBiasGroup("inputCountry", dialectSelected[0], unknownContexts, "context", false);
 
     doCollapse(parent);
 });
@@ -295,7 +291,7 @@ document.getElementById("submitCountry").addEventListener("click", function(even
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function
     // does not check for other garbage values before overwriting
-document.getElementById("dateSubmit").addEventListener("click", function(event){
+document.getElementById("submitDate").addEventListener("click", function(event){
 
     // Custom 'empty' check for dates, requires all dates filled
     var parent = event.target.parentElement;
