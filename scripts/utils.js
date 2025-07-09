@@ -143,11 +143,16 @@ export function populateCiteGroup(containerId, inputList, inputContent, inputNam
 }
 
 // creates a header for suggested items 
-export function populateSuggestedHeader(containerId, text) {
+export function populateSuggestedHeader(containerId, text, type) {
     var container = document.getElementById(containerId);
-    var header = document.createElement("h6");
+    if (type == "h5") {
+        var header = document.createElement("h5");
+        header.classList.add("suggested-h5");
+    } else {
+        var header = document.createElement("h6");
+        header.classList.add("suggested-h6");
+    }
     header.innerText = text;
-    header.classList.add("suggested-header");
     container.appendChild(header);
 }
 
@@ -159,4 +164,15 @@ export function removeChildOfClass(containerId, childClass) {
     for (var i = 0; i < choppingBlock.length; i++){
         choppingBlock[i].remove();
     }
+}
+
+// remove items from an array
+export function removeItems(arr, toRemove) {
+    for (var i=0; i<arr.length; i++) {
+        var index = arr.indexOf(toRemove[i]);
+        if (index !== -1) {
+            arr.splice(index, 1);
+        }
+    }
+    return arr;
 }
