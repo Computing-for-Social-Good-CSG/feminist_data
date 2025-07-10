@@ -2,14 +2,15 @@ import * as utils from './utils.js';
 
 // Global Variables
 var currentAccordion = 0; 
-var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 const baseFormalityList = ["Honorific", "Formal", "Vernacular", "Informal/Slang"];
-const baseContextList = ["Academia", "Education", "Historical", "Law", "Literature", "News", "Religious", "Spoken, conversational", "Social Media"];
+const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken, conversational", "Social Media"];
 
 // -- CHANGE BACK BEFORE PUSHING 
 // var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
 var langArr = utils.pullData("Languages", "data/languages.json");
+// var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
+var dataSourceArr = utils.pullData("Data Sources", "data/data_sources.json");
 
 class Dataset {
     constructor () {
@@ -118,24 +119,14 @@ document.getElementById("submitSource").addEventListener("click", function(event
     // populate known biases
     var headerText = "Suggested biases based on the source: " + d.data_source;
     utils.populateSuggestedHeader("inputSourceBias", headerText); 
-    var sourceArr = dataSourceArr[d.data_source];
-    var knownBiasKeys = Object.keys(sourceArr);     
-    var knownBiasTitles = []
-    for (var i=0; i<knownBiasKeys.length; i++){
-        if (i%3 == 0){
-            knownBiasTitles.push(knownBiasKeys[i]);
-        }
+    if (dataSourceArr[d.data_source].hasOwnProperty("Biases")) {
+        var knownBiases = utils.populateCiteGroup("inputSourceBias", dataSourceArr[d.data_source].Biases, "sourceBias");
     }
-    utils.populateCiteGroup("inputSourceBias", knownBiasKeys, Object.values(sourceArr), "sourceBias");
-
+    
     // populate possible, unknown biases 
-    var unknownBiasTitles = [] 
-    for (var i=0; i<baseBiasList.length; i++){
-        if (!knownBiasTitles.includes(baseBiasList[i])){
-            unknownBiasTitles.push(baseBiasList[i]);
-        }
-    }
+    var unknownBiasTitles = utils.removeItems(baseBiasList, knownBiases); 
     utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
+
     doCollapse(parent);
 })
 
@@ -239,8 +230,6 @@ document.getElementById("submitDialect").addEventListener("click", function(even
                 }
             }
 
-            console.log(d.dialect_by_lang[x]);
-
             var editedDialects = [];
             if (noCountryDialects.length > 0) {
                 var headerText = "No suggested countries based on the dialect(s): " + noCountryDialects.join(", ");
@@ -283,102 +272,72 @@ document.getElementById("submitDialect").addEventListener("click", function(even
 
 // when Countries are submitted, populate Conversation Contexts and Formality 
 document.getElementById("submitCountry").addEventListener("click", function(event){
-    utils.removeChildOfClass("inputFormality","form-check");
+    utils.removeChildOfClass("inputFormality", "form-check");
     utils.removeChildOfClass("inputFormality", "suggested-h6");
-    utils.removeChildOfClass("inputConvo","form-check");
-    utils.removeChildOfClass("inputConvo", "suggested-h6");
+    utils.removeChildOfClass("inputContext", "form-check");
+    utils.removeChildOfClass("inputContext", "suggested-h6");
     var parent = event.target.parentElement;
     var countryNodes = parent.querySelectorAll(`[name*="countries"]:checked`);
     d.country_arr = Array.from(countryNodes).map(checkbox => checkbox.value);
 
+    var suggestForm = [];
+    var suggestFormFrom = []; 
+    var suggestContext = [];
+    var suggestContextFrom = []; 
+
+    // find suggested formality and contexts by data source
+    if (dataSourceArr[d.data_source].Formality) {
+        suggestForm = suggestForm.concat(dataSourceArr[d.data_source].Formality);
+        suggestFormFrom.push(d.data_source);
+    }
+    if (dataSourceArr[d.data_source].Context) {
+        suggestContext = suggestContext.concat(dataSourceArr[d.data_source].Context);
+        suggestContextFrom.push(d.data_source);
+    }
+
+    // find suggested formality and contexts by dialect
     for (var x=0; x<d.lang.length; x++) {
-
-        // no dialect data for the language, break out early 
-        if (!langArr[d.lang[x]].hasOwnProperty("Dialects")) {
-            var headerText = "No suggested formality for the language: " + d.lang[x];
-            utils.populateSuggestedHeader("inputFormality", headerText);
-            var headerText = "No suggested conversation context for the language: " + d.lang[x];
-            utils.populateSuggestedHeader("inputConvo", headerText);
-            continue; 
-        } else {
-            var suggestedFormalities = [];
-            var suggestedConvos = [];
-            var noFormalityDialects = [];
-            var noContextDialects = [];
-
+        if (langArr[d.lang[x]].hasOwnProperty("Dialects")) {
             for (var i=0; i<d.dialect_by_lang[x].length; i++) {
                 if (langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Formality) {
-                    suggestedFormalities = suggestedFormalities.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Formality);
-                } else {
-                    noContextDialects = noContextDialects.concat(d.dialect_by_lang[x][i]);
-                }
+                    suggestForm = suggestForm.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Formality);
+                    suggestFormFrom.push(d.dialect_by_lang[x][i]);
+                } 
                 if (langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Context) {
-                    suggestedConvos = suggestedConvos.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Context);
-                } else {
-                    noContextDialects = noContextDialects.concat(d.dialect_by_lang[x][i]);
-                }
+                    suggestContext = suggestContext.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Context);
+                    suggestContextFrom.push(d.dialect_by_lang[x][i]);
+                } 
             }
-            var editedFormalityDialects = [];
-            if (noFormalityDialects.length > 0) {
-                var headerText = "No suggested formalities based on the dialect(s): " + noFormalityDialects.join(", ");
-                utils.populateSuggestedHeader("inputFormality", headerText);
-                editedFormalityDialects = d.dialect_by_lang[x].slice();
-                editedFormalityDialects = utils.removeItems(editedFormalityDialects, noFormalityDialects);
-            }
-            if (suggestedFormalities.length > 0) {
-                if (editedFormalityDialects.length > 0) {
-                    var headerText = "Suggested formality based on the dialect(s): " + editedFormalityDialects.join(", ");
-                } else {
-                    var headerText = "Suggested formality based on the dialect(s): " + d.dialect_by_lang[x].join(", ");
-                }
-                utils.populateSuggestedHeader("inputFormality", headerText);
-                suggestedFormalities = [... new Set(suggestedFormalities)];
-                utils.populateInputGroup("inputFormality", suggestedFormalities, "checkbox", "formality", null, null, true);
-            } 
-            var editedContextDialects = [];
-            if (noContextDialects.length > 0) {
-                var headerText = "No suggested conversation contexts based on the dialect(s): " + noContextDialects.join(", ");
-                utils.populateSuggestedHeader("inputConvo", headerText);
-                editedContextDialects = d.dialect_by_lang[x].slice();
-                editedContextDialects = utils.removeItems(editedContextDialects, noContextDialects);
-            }
-            if (suggestedConvos.length > 0) {
-                if (editedContextDialects.length > 0) {
-                    var headerText = "Suggested conversation contexts based on the dialect(s): " + editedContextDialects.join(", ");
-                } else {
-                    var headerText = "Suggested conversation contexts based on the dialect(s): " + d.dialect_by_lang[x].join(", ");
-                }
-                utils.populateSuggestedHeader("inputConvo", headerText);
-                suggestedConvos = [... new Set(suggestedConvos)];
-                utils.populateInputGroup("inputConvo", suggestedConvos, "checkbox", "context", null, null, true);
-            }
-        }
-
-        // populate all other formalities and contexts 
-        var headerText = "Other levels of formality";
-        utils.populateSuggestedHeader("inputFormality", headerText);
-        var otherFormalities = [];
-        for (var i=0; i<baseFormalityList.length; i++) {
-            if (!suggestedFormalities.includes(baseFormalityList[i])) {
-                otherFormalities.push(baseFormalityList[i]);
-            }
-        }
-        utils.populateInputGroup("inputFormality", otherFormalities, "checkbox", "formality");
-        var headerText = "Other conversation contexts";
-        utils.populateSuggestedHeader("inputConvo", headerText);
-        var otherContexts = [];
-        for (var i=0; i<baseContextList.length; i++) {
-            if (!suggestedConvos.includes(baseContextList[i])) {
-                otherContexts.push(baseContextList[i]);
-            }
-        }
-        utils.populateInputGroup("inputConvo", otherContexts, "checkbox", "context");
+        } 
     }
+
+    if (suggestForm.length > 0) {
+        var headerText = "Suggested formalities from: " + suggestFormFrom.join(", ");
+        utils.populateSuggestedHeader("inputFormality", headerText);
+        suggestForm = [... new Set(suggestForm)];
+        utils.populateInputGroup("inputFormality", suggestForm, "checkbox", "formality", null, null, true);
+        var otherForm = utils.removeItems(baseFormalityList, suggestForm);
+        utils.populateInputGroup("inputFormality", otherForm, "checkbox", "formality");
+    } else {
+        var headerText = "No suggested formalities based on selected data sources or dialects.";
+        utils.populateSuggestedHeader("inputFormality", headerText);
+        utils.populateInputGroup("inputFormality", baseFormalityList, "checkbox", "formality");
+    }
+    
+    if (suggestContext.length > 0) {
+        var headerText = "Suggested conversational contexts from: " + suggestContextFrom.join(", ");
+        utils.populateSuggestedHeader("inputContext", headerText);
+        suggestContext = [... new Set(suggestContext)];
+        utils.populateInputGroup("inputContext", suggestContext, "checkbox", "context", null, null, true);
+        var otherContext = utils.removeItems(baseContextList, suggestContext);
+        utils.populateInputGroup("inputContext", otherContext, "checkbox", "context");
+    } else { 
+        var headerText = "No suggested conversational contexts based on selected data sources or dialects.";
+        utils.populateSuggestedHeader("inputContext", headerText);
+        utils.populateInputGroup("inputContext", baseContextList, "checkbox", "context");
+    }    
     doCollapse(parent);
 });
-
-
-
 
 // On submit, modify the database with date variables 
     // null checks built in to database class using set function

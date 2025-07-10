@@ -1,14 +1,28 @@
 {
-    "Data Sources":{
-      "Books":{
-        "gender":"unknown"
-      },
-      "Common Crawl":{},
-      "Film transcripts":{},
-      "GoodReads":{},
-      "IMDB":{},
-      "News Media":{},
-      "Reddit":{ 
+  "Data Sources":{
+    "Books":{
+      "Context":["Literature"],
+      "Formality":["Vernacular"]
+    },
+    "Common Crawl":{},
+    "Film transcripts":{
+      "Context":["Spoken, conversational"],
+      "Formality":["Vernacular"]
+    },
+    "GoodReads":{
+      "Context":["Social Media"],
+      "Formality":["Vernacular", "Informal/Slang"]
+    },
+    "IMDB":{
+      "Context":["Encyclopedia"],
+      "Formality":["Formal"]
+    },
+    "News Media":{
+      "Context":["News"], 
+      "Formality":["Formal"]
+    },
+    "Reddit":{ 
+      "Biases":{
         "Age":"64% between 18 and 29",
         "age_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
         "age_link":"https://www.alphr.com/demographics-reddit/",
@@ -22,10 +36,20 @@
         "gender_cite":"William Sattelberg. 2021. The Demographics of Reddit: Who Uses the Site? Alphr.",
         "gender_link":"https://www.alphr.com/demographics-reddit/"
       },
-      "School or other curricula":{},
-      "UN transcripts":{},
-      "Web scraping (other than Common Crawl)":{},
-      "Wikipedia":{
+      "Context":["Social Media"],
+      "Formality":["Vernacular","Informal/Slang"]
+    },
+    "School or other curricula":{
+      "Context":["Education"],
+      "Formality":["Formal"]
+    },
+    "UN transcripts":{
+      "Context":["Spoken, conversational"],
+      "Formality":["Formal", "Vernacular"]
+    },
+    "Web scraping (other than Common Crawl)":{},
+    "Wikipedia":{
+      "Biases":{
         "Gender":"67% male", 
         "gender_cite":"",
         "gender_link":"",
@@ -36,9 +60,16 @@
         "country_cite":"",
         "country_link":""
       },
-      "YELP":{},
-      "YouTube":{}  
+      "Context":["Encyclopedia"],
+      "Formality":["Formal"]
     },
-    "Language": ["English", "Spanish", "Japanese"],
-    "Country": ["Spain","Australia","Monaco"]
+    "YELP":{
+      "Context":["Social Media"],
+      "Formality":["Vernacular", "Informal/Slang"]
+    },
+    "YouTube":{
+      "Context":["Social Media"],
+      "Formality":["Vernacular", "Informal/Slang"]
+    }  
+  }
 }

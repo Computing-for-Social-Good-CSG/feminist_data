@@ -120,26 +120,30 @@ export function inputFactory(containerId, inputId, inputType, inputName, helpIte
 }
 
 // creates group of HTML objects with bias citation links 
-export function populateCiteGroup(containerId, inputList, inputContent, inputName){
-
+export function populateCiteGroup(containerId, biasArr, inputName){
     var container = document.getElementById(containerId);
+    var arrKeys = Object.keys(biasArr);
+    var knownBiases = [];
 
-    for (var i=0; i<inputList.length; i++){
+    for (var i=0; i<arrKeys.length; i++){
         if (i%3 == 0){
-            var formCheck = inputFactory(containerId, inputList[i], "checkbox", inputName, null, null, true);
+            knownBiases.push(arrKeys[i]);
+
+            var formCheck = inputFactory(containerId, arrKeys[i], "checkbox", inputName, null, null, true);
 
             var citeText = document.createElement("p");
-            citeText.textContent = " : " + inputContent[i];
+            citeText.textContent = " : " + Object.values(biasArr)[i];
             citeText.classList.add("cite-text");
             formCheck.appendChild(citeText);
 
             var link = document.createElement("a");
-            link.textContent = inputContent[i+1];
-            link.setAttribute("href", inputContent[i+2]);
+            link.textContent = Object.values(biasArr)[i+1];
+            link.setAttribute("href", Object.values(biasArr)[i+2]);
             link.classList.add("cite-link");
             formCheck.appendChild(link);
         }        
     }
+    return(knownBiases);
 }
 
 // creates a header for suggested items 
