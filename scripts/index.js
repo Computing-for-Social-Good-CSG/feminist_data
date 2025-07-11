@@ -4,7 +4,7 @@ import * as utils from './utils.js';
 var currentAccordion = 0; 
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 const baseFormalityList = ["Honorific", "Formal", "Vernacular", "Informal/Slang"];
-const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken, conversational", "Social Media"];
+const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken (conversational)", "Social Media"];
 
 // -- CHANGE BACK BEFORE PUSHING 
 // var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
@@ -14,25 +14,30 @@ var dataSourceArr = utils.pullData("Data Sources", "data/data_sources.json");
 
 class Dataset {
     constructor () {
-        this.citation_list = [];
-        this.data_source = "";
-        this.age = "";
+        this.age = null;
+        this.age_cite = null;
+        this.age_link = null;
         this.class = "";
-        this.lang = [];
+        this.class_cite = null;
+        this.class_link = null;
+        this.collect_start = "";
+        this.collect_start_est = false;
+        this.collect_end = "";
+        this.collect_end_est = false;
+        this.country_arr = [];       
+        this.data_source = "";
         this.dialect = [];
         this.dialect_by_lang = [];
-        this.country_arr = [];
-        this.race = "";
         this.formality = "";
-        // change gen to timestamp
-        this.gen_date_start = "";
-        this.gen_date_start_est = false;
-        this.gen_date_end = "";
-        this.gen_date_end_est = false;
-        this.collect_date_start = "";
-        this.collect_date_start_est = false;
-        this.collect_date_end = "";
-        this.collect_date_end_est = false;
+        this.gender = null;
+        this.gender_cite = null;
+        this.gender_link = null;        
+        this.lang = [];
+        this.race = "";
+        this.timestamp_start = "";
+        this.timestamp_start_est = false;
+        this.timestamp_end = "";
+        this.timestamp_end_est = false;
     }
 
     set(varString, value) {
@@ -119,35 +124,22 @@ document.getElementById("submitSource").addEventListener("click", function(event
     // populate known biases
     var headerText = "Suggested biases based on the source: " + d.data_source;
     utils.populateSuggestedHeader("inputSourceBias", headerText); 
+
+    var knownBiases = [];
     if (dataSourceArr[d.data_source].hasOwnProperty("Biases")) {
-        var knownBiases = utils.populateCiteGroup("inputSourceBias", dataSourceArr[d.data_source].Biases, "sourceBias");
+        knownBiases = utils.populateCiteGroup("inputSourceBias", dataSourceArr[d.data_source].Biases, "sourceBias");
     }
     
     // populate possible, unknown biases 
     var unknownBiasTitles = utils.removeItems(baseBiasList, knownBiases); 
     utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
-
     doCollapse(parent);
-})
+});
 
 // when Data Source Biases are submitted, update database 
 document.getElementById("submitSourceBias").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
-    if (document.getElementById("Age").checked) {
-        d.age = utils.updateBias("Age");
-    } 
-    if (document.getElementById("Country").checked) {
-        d.country_arr = utils.updateBias("Country");
-    }
-    if (document.getElementById("Language").checked) {
-        d.lang = utils.updateBias("Language");
-    }
-    if (document.getElementById("Race").checked) {
-        d.race = utils.updateBias("Race");
-    }
-    if (document.getElementById("Socioeconomic Class").checked) {
-        d.class = utils.updateBias("Socioeconomic Class");
-    }
+    utils.updateBiases(dataSourceArr, d);
     doCollapse(parent);
 });
 
@@ -339,33 +331,62 @@ document.getElementById("submitCountry").addEventListener("click", function(even
     doCollapse(parent);
 });
 
-// On submit, modify the database with date variables 
-    // null checks built in to database class using set function
-    // does not check for other garbage values before overwriting
-document.getElementById("submitDate").addEventListener("click", function(event){
-
-    // Custom 'empty' check for dates, requires all dates filled
+// when Formality and Conversation Context are submitted, open dates 
+document.getElementById("submitFormalityContext").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
-    var dates = parent.querySelectorAll(`[type*="date"]`);
-    for (var i = 0; i < dates.length; i++) {
-        if(dates[i].value == "") {
-            console.log("Empty date, taking no action");
-            return false;
-        }
+    var formalityNodes = parent.querySelectorAll(`[name*="formality"]:checked`);
+    d.formality = Array.from(formalityNodes).map(checkbox => checkbox.value);
+    var contextNodes = parent.querySelectorAll(`[name*="context"]:checked`);
+    d.context = Array.from(contextNodes).map(checkbox => checkbox.value);    
+
+    if (d.formality.length == 0 | d.context.length == 0) {
+        console.log("No selection, not taking any action")
+        return;
     }
 
     doCollapse(parent);
+});
 
-    if(d.set('gen_date_start', document.getElementById('startDateGen').value)) {
-       d.set('gen_date_start_est', document.getElementById('startDateGenEst').checked);
-    }
-    if (d.set('gen_date_end', document.getElementById('endDateGen').value)) {
-        d.set('gen_date_end_est', document.getElementById('endDateGenEst').checked);
-    }
-    if (d.set('collect_date_start', document.getElementById('startDateCol').value)) {
-        d.set('collect_date_start_est', document.getElementById('startDateColEst').checked);
-    }
-    if (d.set('collect_date_end', document.getElementById('endDateCol').value)) {
-        d.set('collect_date_end_est', document.getElementById('endDateColEst').checked);
-    }
+// document.getElementById("submitDate").addEventListener("click", function(event){
+
+//     // requires all dates filled
+//     var parent = event.target.parentElement;
+//     var dates = parent.querySelectorAll(`[type*="date"]`);
+//     for (var i = 0; i < dates.length; i++) {
+//         if(dates[i].value == "") {
+//             console.log("Empty date, taking no action");
+//             return false;
+//         }
+//     }
+
+//     if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
+//        d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);
+//     }
+//     if (d.set('timestamp_end', document.getElementById('endTimestamp').value)) {
+//         d.set('timestamp_end_est', document.getElementById('endTimestampEst').checked);
+//     }
+//     if (d.set('collect_date_start', document.getElementById('startCol').value)) {
+//         d.set('collect_date_start_est', document.getElementById('startColEst').checked);
+//     }
+//     if (d.set('collect_date_end', document.getElementById('endCol').value)) {
+//         d.set('collect_date_end_est', document.getElementById('endColEst').checked);
+//     }
+//     doCollapse(parent);
+// });
+
+// generate final print out 
+document.getElementById("finish").addEventListener("click", function(event) {
+    var parent = event.target.parentElement;
+
+    utils.populateReportItem("reportBody", "Data Source", d.data_source);  
+    utils.populateReportItem("reportBody", "Language", d.lang);
+    utils.populateReportItem("reportBody", "Dialect", d.dialect);  
+    utils.populateReportItem("reportBody", "Country", d.country_arr);
+    utils.populateReportItem("reportBody", "Formality", d.formality);
+    utils.populateReportItem("reportBody", "Conversation Context", d.context);
+
+    utils.populateReportBias("reportBody", "Age", d.age, d.age_cite, d.age_link);
+    utils.populateReportBias("reportBody", "Gender", d.gender, d.gender_cite, d.gender_link);
+
+    doCollapse(parent);
 });

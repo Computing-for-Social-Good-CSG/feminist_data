@@ -6,7 +6,7 @@
     },
     "Common Crawl":{},
     "Film transcripts":{
-      "Context":["Spoken, conversational"],
+      "Context":["Spoken (conversational)"],
       "Formality":["Vernacular"]
     },
     "GoodReads":{
@@ -44,7 +44,7 @@
       "Formality":["Formal"]
     },
     "UN transcripts":{
-      "Context":["Spoken, conversational"],
+      "Context":["Spoken (conversational)"],
       "Formality":["Formal", "Vernacular"]
     },
     "Web scraping (other than Common Crawl)":{},

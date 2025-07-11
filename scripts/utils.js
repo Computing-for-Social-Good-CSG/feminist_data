@@ -18,7 +18,7 @@ export function formEmpty(accordionParent){
 
     // Check for any toggled inputs
     for (var i = 0; i < inputs.length; i++) {
-        if(inputs[i].checked) {
+        if (inputs[i].checked) {
             return false;
         }
     }
@@ -58,10 +58,38 @@ export function pullData(key, jsonPath){
 // When checking the boxes below citations, such as "Race" a null read error occurs
 // Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
 
-export function updateBias(biasTitle){
-    var formCheck = document.getElementById(biasTitle).parentElement;
-    var str = formCheck.querySelector(".cite-text").textContent;
-    return(str.substring(3, str.length));
+export function updateBiases(dataSourceArr, data_obj){
+    var biasArr = dataSourceArr[data_obj.data_source].Biases;
+    if (document.getElementById("Age").checked) {
+        data_obj.Age = biasArr["Age"];
+        data_obj.age_cite = biasArr["age_cite"];
+        data_obj.age_link = biasArr["age_link"];
+    } 
+    if (document.getElementById("Country").checked) {
+        data_obj.country_arr = biasArr["Country"];
+        data_obj.country_cite = biasArr["country_cite"];
+        data_obj.country_link = biasArr["country_link"];
+    }
+    if (document.getElementById("Gender").checked) {
+        data_obj.gender = biasArr["Gender"];
+        data_obj.gender_cite = biasArr["gender_cite"];
+        data_obj.gender_link = biasArr["gender_link"];
+    }
+    if (document.getElementById("Language").checked) {
+        data_obj.lang = biasArr["Language"];
+        data_obj.lang_cite = biasArr["lang_cite"];
+        data_obj.lang_link = biasArr["lang_link"];
+    }
+    if (document.getElementById("Race").checked) {
+        data_obj.race = biasArr["Race"];
+        data_obj.race_cite = biasArr["race_cite"];
+        data_obj.race_link = biasArr["race_link"];
+    }
+    if (document.getElementById("Socioeconomic Class").checked) {
+        data_obj.class = biasArr["Class"];
+        data_obj.class_cite = biasArr["class_cite"];
+        data_obj.class_link = biasArr["class_link"];
+    }
 };
 
 // creates a group of inputs 
@@ -172,11 +200,56 @@ export function removeChildOfClass(containerId, childClass) {
 
 // remove items from an array
 export function removeItems(arr, toRemove) {
-    for (var i=0; i<arr.length; i++) {
-        var index = arr.indexOf(toRemove[i]);
+    var arrCopy = arr.slice()
+    for (var i=0; i<arrCopy.length; i++) {
+        var index = arrCopy.indexOf(toRemove[i]);
         if (index !== -1) {
-            arr.splice(index, 1);
+            arrCopy.splice(index, 1);
         }
     }
-    return arr;
+    return arrCopy;
+}
+
+// generate an item in final report 
+export function populateReportItem(containerId, itemName, itemValue) {
+    var container = document.getElementById(containerId);
+
+    var r = document.createElement("div");
+    r.classList.add("row");
+    container.appendChild(r);
+
+    var title_div = document.createElement("div");
+    title_div.classList.add("col-4");
+    title_div.classList.add("report-title");
+    r.appendChild(title_div);
+    var title = document.createElement("p");
+    title.innerText = itemName;
+    title_div.appendChild(title);
+
+    var val_div = document.createElement("div");
+    val_div.classList.add("col");
+    val_div.classList.add("report-value");
+    r.appendChild(val_div);
+    var val = document.createElement("p");
+    if (Array.isArray(itemValue) & itemValue.length > 1) {
+        val.innerText = itemValue.join(", ");
+    } else if (itemValue.length == 0) {
+        val.innerText = "none";
+    } else {
+        val.innerText = itemValue;
+    }
+    val_div.appendChild(val);
+
+    return(val_div);
+}
+
+export function populateReportBias(containerId, itemName, itemValue, citation, url) {
+    if (itemValue != null) {
+        var val_div = populateReportItem(containerId, itemName, itemValue);
+        var link = document.createElement("a");
+        link.innerText = citation;
+        link.setAttribute("href", url);
+        link.classList.add("cite-link");
+        val_div.appendChild(link);
+    }
 }

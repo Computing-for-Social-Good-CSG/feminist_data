@@ -11,13 +11,11 @@
           },
           "Cantonese (Yue)":{
             "Countries":["China","Hong Kong", "Macao"],
-            "Context":["Education", "Spoken, conversational"],
-            "Formality":{}  
+            "Context":["Education", "Spoken (conversational)"] 
           },
           "Wu":{
             "Countries":["China","Hong Kong", "Macao"],
-            "Context":["Spoken, conversational"],
-            "Formality":{}              
+            "Context":["Spoken (conversational)"]         
           }
         }
       },
@@ -33,27 +31,27 @@
           },
           "Egyptian Arabic":{
             "Countries":["Egypt", "Sudan"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Gulf Arabic":{
             "Countries":["Bahrain", "Kuwait", "Oman", "Qatar", "Saudi Arabia", "United Arab Emirates"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Iraqi":{
             "Countries":["Iraq", "Kuwait", "Qatar", "Saudi Arabia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Levantine Arabic":{
             "Countries":["Israel", "Jordan", "Lebanon", "Palestine", "Syria", "Turkey"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Maghrebi":{
             "Countries":["Algeria", "Libya", "Mauritania", "Morocco", "Tunisia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Modern Standard Arabic":{
@@ -62,7 +60,7 @@
           },
           "Yemeni Arabic":{
             "Countries":["Yemen", "Saudi Arabia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           }, 
           "Other":{
