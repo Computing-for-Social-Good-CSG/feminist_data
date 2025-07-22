@@ -30,6 +30,17 @@ input[type="text"] {
 	width: calc(100% - 200px);
 	float: right;
 }
+.add-other {
+	display: block;
+	margin-top: 12px;
+	margin-bottom: 12px;
+	border-color: #6c757d;
+	border-width: 1px;
+}
+.add-other:hover {
+	border-color: #6c757d;
+	background-color: #f2f2f2;
+}
 
 /* Final Report */
 #reportContainer {
@@ -63,7 +74,6 @@ input[type="text"] {
 	margin-bottom: 0px;
 	line-height: 18px;
 }
-.report-value {}
 .report-value p {
 	padding-top: 16px;
 	padding-bottom: 16px;
@@ -71,6 +81,9 @@ input[type="text"] {
 	padding-right: 6px;
 	margin-bottom: 0px;
 	line-height: 18px;
+}
+.report-value .cite-text {
+	padding-bottom: 2px;
 }
 .report-value a {
 	padding-left: 6px;

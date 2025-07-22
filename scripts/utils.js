@@ -87,7 +87,11 @@ export function inputFactory(containerId, inputId, inputType, inputName, helpIte
     var label = document.createElement('label');
     label.classList.add("form-check-label");
     label.setAttribute("for", inputId);
-    label.appendChild(document.createTextNode(inputId));
+    if (inputId.includes("Other")) {
+        label.appendChild(document.createTextNode("Other:"));
+    } else {
+        label.appendChild(document.createTextNode(inputId));
+    }
     formCheck.appendChild(label);
 
     // create help text 
@@ -136,20 +140,28 @@ export function populateCiteGroup(containerId, biasArr, inputName){
 }
 
 // creates "other" text entry option 
-export function inputOtherFactory(containerId, inputId, inputName) {
+export function inputOtherFactory(containerId, inputId, inputName, otherCounter) {
     var container = document.getElementById(containerId);
     var entryDiv = document.createElement("div");
-    entryDiv.id = inputId + "_div";
+    var useId = inputId;
 
-    var formCheck = inputFactory(containerId, inputId, "checkbox", inputName);
+    if (otherCounter) {
+        useId = inputId + otherCounter;
+    } 
+
+    entryDiv.id = useId + "_div";
+
+    var formCheck = inputFactory(containerId, useId, "checkbox", inputName);
     formCheck.classList.add("text-entry-holder");
-    formCheck.querySelector("label").innerText = inputId + ":";
-
+    if (!otherCounter) {
+        console.log("NOT OTHER");
+        formCheck.querySelector("label").innerText = useId + ":";
+    }
+    
     var textEntry = document.createElement("input");
     textEntry.name = inputName;
-    textEntry.id = inputId + "Entry";
+    textEntry.id = useId + "Entry";
     textEntry.setAttribute("type", "text");
-    // textEntry.classList.add(".form-control-sm"); -- not working 
     formCheck.appendChild(textEntry);
 
     var formGroup = document.createElement("div");
@@ -158,12 +170,12 @@ export function inputOtherFactory(containerId, inputId, inputName) {
     entryDiv.appendChild(formGroup);
     
     var citeLabel = document.createElement("label");
-    citeLabel.setAttribute("for", inputId + "Cite");
+    citeLabel.setAttribute("for", useId + "Cite");
     citeLabel.innerText = "Citation:";
     formGroup.appendChild(citeLabel);
 
     var citeInput = document.createElement("input");
-    citeInput.id = inputId + "Cite";
+    citeInput.id = useId + "Cite";
     citeInput.type = "text";
     formGroup.appendChild(citeInput);
 
@@ -173,12 +185,12 @@ export function inputOtherFactory(containerId, inputId, inputName) {
     entryDiv.appendChild(formGroup2);
 
     var linkLabel = document.createElement("label");
-    linkLabel.setAttribute("for", inputId + "Link");
+    linkLabel.setAttribute("for", useId + "Link");
     linkLabel.innerText = "Link:";
     formGroup2.appendChild(linkLabel);
 
     var linkInput = document.createElement("input");
-    linkInput.id = inputId + "Link";
+    linkInput.id = useId + "Link";
     linkInput.type = "text";
     formGroup2.appendChild(linkInput);
 
@@ -189,7 +201,6 @@ export function populateOtherGroup(containerId, titleList, inputName) {
     for (var i=0; i<titleList.length; i++) {
         inputOtherFactory(containerId, titleList[i], inputName);
     }
-    inputOtherFactory(containerId, "Other", inputName);
 }
 
 // Known issue in below function: 
@@ -197,10 +208,10 @@ export function populateOtherGroup(containerId, titleList, inputName) {
 // When checking the boxes below citations, such as "Race" a null read error occurs
 // Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
 
-export function updateBiases(dataSourceArr, data_obj){
+export function updateBiases(dataSourceArr, data_obj, otherCounter){
     var biasArr = dataSourceArr[data_obj.data_source].Biases;
     if (document.getElementById("Age").checked) {
-        data_obj.Age = biasArr["Age"];
+        data_obj.age = biasArr["Age"];
         data_obj.age_cite = biasArr["age_cite"];
         data_obj.age_link = biasArr["age_link"];
     } 
@@ -229,14 +240,16 @@ export function updateBiases(dataSourceArr, data_obj){
         data_obj.class_cite = biasArr["class_cite"];
         data_obj.class_link = biasArr["class_link"];
     }
-    if (document.getElementById("Other").checked) { 
-        var itemArr = [];
-        itemArr.push(document.getElementById("OtherEntry").value);
-        itemArr.push(document.getElementById("OtherCite").value);
-        itemArr.push(document.getElementById("OtherLink").value);
-        data_obj.bias_other.push(itemArr);
+    if (document.getElementById("Other1").checked) { 
+        for (var i=1; i<=otherCounter; i++) {
+            var useId = "Other" + i;
+            var itemArr = [];
+            itemArr.push(document.getElementById(useId + "Entry").value);
+            itemArr.push(document.getElementById(useId + "Cite").value);
+            itemArr.push(document.getElementById(useId + "Link").value);
+            data_obj.bias_other.push(itemArr);
+        }
     }
-
 };
 
 // creates a header for suggested items 
@@ -258,7 +271,7 @@ export function populateSuggestedHeader(containerId, text, type) {
 export function removeChildOfClass(containerId, childClass) {
     var containerTarget = document.getElementById(containerId);
     var choppingBlock = containerTarget.querySelectorAll(`[class*="${childClass}"]`);
-    for (var i = 0; i < choppingBlock.length; i++){
+    for (var i=0; i<choppingBlock.length; i++){
         choppingBlock[i].remove();
     }
 }
@@ -313,6 +326,9 @@ export function populateReportItem(containerId, itemName, itemValue) {
 export function populateReportBias(containerId, itemName, itemValue, citation, url) {
     if (itemValue != null) {
         var val_div = populateReportItem(containerId, itemName, itemValue);
+
+        val_div.querySelector("p").classList.add("cite-text");
+
         var link = document.createElement("a");
         link.innerText = citation;
         link.setAttribute("href", url);

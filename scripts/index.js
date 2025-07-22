@@ -143,13 +143,17 @@ document.getElementById("submitSource").addEventListener("click", function(event
     doCollapse(parent);
 });
 
+// add "Other" Data Source Biases on click 
+var sourceBiasOtherCounter = 0;
+document.getElementById("sourceBiasAddOther").addEventListener("click", function() {
+    sourceBiasOtherCounter++;
+    utils.inputOtherFactory("inputSourceBias", "Other", "sourceBias", sourceBiasOtherCounter);
+})
+
 // when Data Source Biases are submitted, update database 
 document.getElementById("submitSourceBias").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
-    utils.updateBiases(dataSourceArr, d);
-
-    console.log(d.bias_other);
-
+    utils.updateBiases(dataSourceArr, d, sourceBiasOtherCounter);
     doCollapse(parent);
 });
 
@@ -395,8 +399,17 @@ document.getElementById("finish").addEventListener("click", function(event) {
     utils.populateReportItem("reportBody", "Formality", d.formality);
     utils.populateReportItem("reportBody", "Conversation Context", d.context);
 
+    console.log(d.age);
+
     utils.populateReportBias("reportBody", "Age", d.age, d.age_cite, d.age_link);
     utils.populateReportBias("reportBody", "Gender", d.gender, d.gender_cite, d.gender_link);
+
+    if (d.bias_other.length > 0) { 
+        for (var i=0; i<d.bias_other.length; i++) {
+            var otherBias = d.bias_other[i];
+            utils.populateReportBias("reportBody", "Other", otherBias[0], otherBias[1], otherBias[2]);
+        }
+    }
 
     doCollapse(parent);
 });
