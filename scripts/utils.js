@@ -53,45 +53,6 @@ export function pullData(key, jsonPath){
     return my_JSON_object[key];
 }
 
-// Known issue in below function: 
-// var str = formCheck.querySelector(".cite-text").textContent;
-// When checking the boxes below citations, such as "Race" a null read error occurs
-// Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
-
-export function updateBiases(dataSourceArr, data_obj){
-    var biasArr = dataSourceArr[data_obj.data_source].Biases;
-    if (document.getElementById("Age").checked) {
-        data_obj.Age = biasArr["Age"];
-        data_obj.age_cite = biasArr["age_cite"];
-        data_obj.age_link = biasArr["age_link"];
-    } 
-    if (document.getElementById("Country").checked) {
-        data_obj.country_arr = biasArr["Country"];
-        data_obj.country_cite = biasArr["country_cite"];
-        data_obj.country_link = biasArr["country_link"];
-    }
-    if (document.getElementById("Gender").checked) {
-        data_obj.gender = biasArr["Gender"];
-        data_obj.gender_cite = biasArr["gender_cite"];
-        data_obj.gender_link = biasArr["gender_link"];
-    }
-    if (document.getElementById("Language").checked) {
-        data_obj.lang = biasArr["Language"];
-        data_obj.lang_cite = biasArr["lang_cite"];
-        data_obj.lang_link = biasArr["lang_link"];
-    }
-    if (document.getElementById("Race").checked) {
-        data_obj.race = biasArr["Race"];
-        data_obj.race_cite = biasArr["race_cite"];
-        data_obj.race_link = biasArr["race_link"];
-    }
-    if (document.getElementById("Socioeconomic Class").checked) {
-        data_obj.class = biasArr["Class"];
-        data_obj.class_cite = biasArr["class_cite"];
-        data_obj.class_link = biasArr["class_link"];
-    }
-};
-
 // creates a group of inputs 
 export function populateInputGroup(containerId, inputItems, inputType, inputName, helpItem, helpPrefix, selected) {
     for (var i=0; i<inputItems.length; i++) {
@@ -174,6 +135,110 @@ export function populateCiteGroup(containerId, biasArr, inputName){
     return(knownBiases);
 }
 
+// creates "other" text entry option 
+export function inputOtherFactory(containerId, inputId, inputName) {
+    var container = document.getElementById(containerId);
+    var entryDiv = document.createElement("div");
+    entryDiv.id = inputId + "_div";
+
+    var formCheck = inputFactory(containerId, inputId, "checkbox", inputName);
+    formCheck.classList.add("text-entry-holder");
+    formCheck.querySelector("label").innerText = inputId + ":";
+
+    var textEntry = document.createElement("input");
+    textEntry.name = inputName;
+    textEntry.id = inputId + "Entry";
+    textEntry.setAttribute("type", "text");
+    // textEntry.classList.add(".form-control-sm"); -- not working 
+    formCheck.appendChild(textEntry);
+
+    var formGroup = document.createElement("div");
+    formGroup.classList.add("form-group");
+    formGroup.classList.add("text-entry-holder");
+    entryDiv.appendChild(formGroup);
+    
+    var citeLabel = document.createElement("label");
+    citeLabel.setAttribute("for", inputId + "Cite");
+    citeLabel.innerText = "Citation:";
+    formGroup.appendChild(citeLabel);
+
+    var citeInput = document.createElement("input");
+    citeInput.id = inputId + "Cite";
+    citeInput.type = "text";
+    formGroup.appendChild(citeInput);
+
+    var formGroup2 = document.createElement("div");
+    formGroup2.classList.add("form-group");
+    formGroup2.classList.add("text-entry-holder");   
+    entryDiv.appendChild(formGroup2);
+
+    var linkLabel = document.createElement("label");
+    linkLabel.setAttribute("for", inputId + "Link");
+    linkLabel.innerText = "Link:";
+    formGroup2.appendChild(linkLabel);
+
+    var linkInput = document.createElement("input");
+    linkInput.id = inputId + "Link";
+    linkInput.type = "text";
+    formGroup2.appendChild(linkInput);
+
+    container.appendChild(entryDiv);
+}
+
+export function populateOtherGroup(containerId, titleList, inputName) {
+    for (var i=0; i<titleList.length; i++) {
+        inputOtherFactory(containerId, titleList[i], inputName);
+    }
+    inputOtherFactory(containerId, "Other", inputName);
+}
+
+// Known issue in below function: 
+// var str = formCheck.querySelector(".cite-text").textContent;
+// When checking the boxes below citations, such as "Race" a null read error occurs
+// Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
+
+export function updateBiases(dataSourceArr, data_obj){
+    var biasArr = dataSourceArr[data_obj.data_source].Biases;
+    if (document.getElementById("Age").checked) {
+        data_obj.Age = biasArr["Age"];
+        data_obj.age_cite = biasArr["age_cite"];
+        data_obj.age_link = biasArr["age_link"];
+    } 
+    if (document.getElementById("Country").checked) {
+        data_obj.country_arr = biasArr["Country"];
+        data_obj.country_cite = biasArr["country_cite"];
+        data_obj.country_link = biasArr["country_link"];
+    }
+    if (document.getElementById("Gender").checked) {
+        data_obj.gender = biasArr["Gender"];
+        data_obj.gender_cite = biasArr["gender_cite"];
+        data_obj.gender_link = biasArr["gender_link"];
+    }
+    if (document.getElementById("Language").checked) {
+        data_obj.lang = biasArr["Language"];
+        data_obj.lang_cite = biasArr["lang_cite"];
+        data_obj.lang_link = biasArr["lang_link"];
+    }
+    if (document.getElementById("Race").checked) {
+        data_obj.race = biasArr["Race"];
+        data_obj.race_cite = biasArr["race_cite"];
+        data_obj.race_link = biasArr["race_link"];
+    }
+    if (document.getElementById("Socioeconomic Class").checked) {
+        data_obj.class = biasArr["Class"];
+        data_obj.class_cite = biasArr["class_cite"];
+        data_obj.class_link = biasArr["class_link"];
+    }
+    if (document.getElementById("Other").checked) { 
+        var itemArr = [];
+        itemArr.push(document.getElementById("OtherEntry").value);
+        itemArr.push(document.getElementById("OtherCite").value);
+        itemArr.push(document.getElementById("OtherLink").value);
+        data_obj.bias_other.push(itemArr);
+    }
+
+};
+
 // creates a header for suggested items 
 export function populateSuggestedHeader(containerId, text, type) {
     var container = document.getElementById(containerId);
@@ -200,14 +265,16 @@ export function removeChildOfClass(containerId, childClass) {
 
 // remove items from an array
 export function removeItems(arr, toRemove) {
-    var arrCopy = arr.slice()
-    for (var i=0; i<arrCopy.length; i++) {
-        var index = arrCopy.indexOf(toRemove[i]);
-        if (index !== -1) {
-            arrCopy.splice(index, 1);
+    var result = [];
+
+    for (var i=0; i<arr.length; i++) {
+        var index = arr.indexOf(toRemove[i]);
+        
+        if (index == -1) {
+            result.push(arr[i]);
         }
     }
-    return arrCopy;
+    return result;
 }
 
 // generate an item in final report 

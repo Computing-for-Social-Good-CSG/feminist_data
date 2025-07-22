@@ -15,6 +15,21 @@
 .suggested-h5 {
 	padding-top: 20px;
 }
+.text-entry-holder {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+.form-group.text-entry-holder { 
+	margin-left: 24px;
+}
+.form-group label {
+	margin-left: 24px;
+	color: gray;
+}
+input[type="text"] {
+	width: calc(100% - 200px);
+	float: right;
+}
 
 /* Final Report */
 #reportContainer {

@@ -17,6 +17,7 @@ class Dataset {
         this.age = null;
         this.age_cite = null;
         this.age_link = null;
+        this.bias_other = [];
         this.class = "";
         this.class_cite = null;
         this.class_link = null;
@@ -121,18 +122,24 @@ document.getElementById("submitSource").addEventListener("click", function(event
         return;
     }
 
-    // populate known biases
-    var headerText = "Suggested biases based on the source: " + d.data_source;
-    utils.populateSuggestedHeader("inputSourceBias", headerText); 
-
     var knownBiases = [];
     if (dataSourceArr[d.data_source].hasOwnProperty("Biases")) {
+
+        // populate known biases
+        var headerText = "Suggested biases based on the source: " + d.data_source;
+        utils.populateSuggestedHeader("inputSourceBias", headerText);
         knownBiases = utils.populateCiteGroup("inputSourceBias", dataSourceArr[d.data_source].Biases, "sourceBias");
+    } else {
+        var headerText = "No suggested biases based on the source: " + d.data_source;
+        utils.populateSuggestedHeader("inputSourceBias", headerText);
     }
-    
+
     // populate possible, unknown biases 
+    var headerText = "Other possible bias categories"
+    utils.populateSuggestedHeader("inputSourceBias", headerText);
     var unknownBiasTitles = utils.removeItems(baseBiasList, knownBiases); 
-    utils.populateInputGroup("inputSourceBias", unknownBiasTitles, "checkbox", "sourceBias");
+    utils.populateOtherGroup("inputSourceBias", unknownBiasTitles, "sourceBias");
+
     doCollapse(parent);
 });
 
@@ -140,6 +147,9 @@ document.getElementById("submitSource").addEventListener("click", function(event
 document.getElementById("submitSourceBias").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
     utils.updateBiases(dataSourceArr, d);
+
+    console.log(d.bias_other);
+
     doCollapse(parent);
 });
 
