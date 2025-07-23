@@ -414,10 +414,12 @@ document.getElementById("submitFormalityContext").addEventListener("click", func
     doCollapse(parent);
 });
 
-document.getElementById("finish").addEventListener("click", function(event){
-
-    // requires all dates filled
+// generate final print out 
+document.getElementById("finish").addEventListener("click", function(event) {
+    utils.removeChildOfClass("reportBody", "row");
     var parent = event.target.parentElement;
+   
+    // requires all dates filled
     var dates = parent.querySelectorAll(`[type*="date"]`);
     for (var i = 0; i < dates.length; i++) {
         if(dates[i].value == "") {
@@ -432,18 +434,13 @@ document.getElementById("finish").addEventListener("click", function(event){
     if (d.set('timestamp_end', document.getElementById('endTimestamp').value)) {
         d.set('timestamp_end_est', document.getElementById('endTimestampEst').checked);
     }
-    if (d.set('collect_date_start', document.getElementById('startCol').value)) {
-        d.set('collect_date_start_est', document.getElementById('startColEst').checked);
+    if (d.set('collect_start', document.getElementById('startCol').value)) {
+        d.set('collect_start_est', document.getElementById('startColEst').checked);
     }
-    if (d.set('collect_date_end', document.getElementById('endCol').value)) {
-        d.set('collect_date_end_est', document.getElementById('endColEst').checked);
+    if (d.set('collect_end', document.getElementById('endCol').value)) {
+        d.set('collect_end_est', document.getElementById('endColEst').checked);
     }
-    doCollapse(parent);
-});
 
-// generate final print out 
-document.getElementById("finish").addEventListener("click", function(event) {
-    var parent = event.target.parentElement;
     utils.populateReportItem("reportBody", "Data Source", d.data_source); 
 
     if (d.lang[0].length == 4) {
