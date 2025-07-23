@@ -1,5 +1,5 @@
 // Global Variables 
-var collapseBlacklist = ["lang"]; // Expand as needed
+var collapseBlacklist = ["lang","dates"]; // Expand as needed
 
 // Get all radio input of parent and return true if none are toggled
 export function formEmpty(accordionParent){
