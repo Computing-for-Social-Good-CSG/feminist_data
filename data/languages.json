@@ -4,18 +4,86 @@
       "Chinese":{
         "Countries":["China"],
         "Dialects":{
-          "Mandarin":{
-            "Countries":["China"],
-            "Context":["Education"],
-            "Formality":"Formal"
-          },
           "Cantonese (Yue)":{
             "Countries":["China","Hong Kong", "Macao"],
             "Context":["Education", "Spoken (conversational)"] 
           },
+          "Classical":{
+            "Countries":["China"],
+            "Context":["Education"]
+          },
+          "Gan":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Hainanese":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Hakka":{
+            "Countries":["China","Hong Kong"],
+            "Context":["Education", "Spoken (conversational)"]
+          },
+          "Huizhou":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Jinyu":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Leizhou":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Mandarin":{
+            "Countries":["China"],
+            "Context":["Education"],
+            "Formality":["Formal"]
+          },
+          "Min Bei":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Min Dong":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Min Nan":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Min Zhong":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Pinghua (Northern)":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Pinghua (Southern)":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Pu-Xian":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Shaojiang":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
           "Wu":{
             "Countries":["China","Hong Kong", "Macao"],
             "Context":["Spoken (conversational)"]         
+          },
+          "Xiang":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
+          },
+          "Yue":{
+            "Countries":["China"],
+            "Context":["Spoken (conversational)"]
           }
         }
       },
