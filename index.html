@@ -16,13 +16,10 @@
 		<div class="col">
 			<h1>Data Feminism Bias Report Generator</h1>
 			<h4>Introduction</h2>
-			<p>This is a prototype tool for authors of NLP research papers to report biases related to their datasets. It dynamically adapts to information about the dataset as you add it to suggest possible biases. Each bias includes a citation to published statistics and previous research.</p>
-			<p>If there is a research paper you think should be added to the tool, you can <a href="#">suggested it through this form</a>.</p>
+			<p>This is a prototype tool for authors of NLP research papers to report biases related to their datasets. It dynamically adapts to information about the dataset as you add it to suggest possible biases.</p>
+			<p>If there is a research paper you think should be added to the tool, you can <a href="https://forms.gle/HE3HAQCotgwe11JA7">suggested it through this form</a>.</p>
 			<p>All code for the prototype is published <a href="https://github.com/Computing-for-Social-Good-CSG/feminist_data">on our GitHub</a>.</p>
-			<p>You can also <a href="#">read the paper (forthcoming)</a> to understand the research upon which this prototype is based.</p>
-
-			<h4>Inspiration</h2>
-			<p>There are other bias reporting paradigms that we drew inspiration from in creating this tool. Often they are tailored to other types of datasets or models, or reporting contexts. Additionally, most still rely on paper authors to generate potential sources of bias, whereas our tool proactively suggests them. See <a href="https://github.com/Computing-for-Social-Good-CSG/feminist_data">the GitHub</a> for a complete list.</p>
+			<p id="lastIntroPara">You can also <a href="https://dl.acm.org/doi/10.1145/3715275.3732119">read the paper</a> to understand the research that motivated this prototype.</p>
 		</div>
 	</div>
 </div>
@@ -39,9 +36,10 @@
 					</h2>
 					<div id="collapseDataSource" class="accordion-collapse collapse show" aria-labelledby="headerDataSource" data-bs-parent="#collapseDataSource">
 						<div name="dataSource" class="accordion-body">
-							<p class="help-text">Only one item is selectable. If your data come from more than one source, we recommend filling out multiple forms.</p>
+							<p class="help-text">Select only one item. If your data come from more than one source, we recommend filling out multiple forms.</p>
+							<p class="hedge">As a prototype, only some of the following options are populated in our database. Currently Reddit and Wikipedia contain the most complete entries.</p>
 							<div id="inputDataSource"></div>
-							<button class="btn btn-secondary" type="button" name="submit" id="sourceSubmit">Submit</button>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitSource">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -55,7 +53,8 @@
 					<div id="collapseSourceBias" class="accordion-collapse collapse" aria-labelledby="headerSourceBias" data-bs-parent="#collapseSourceBias">
 						<div name="sourceBias" class="accordion-body">
 							<div id="inputSourceBias"></div>
-							<button class="btn btn-secondary" type="button" name="submit" id="sourceBiasSubmit">Submit</button>
+							<button id="sourceBiasAddOther" type="button" class="btn btn-outline-secondary">Add "Other"</button>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitSourceBias">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -68,10 +67,11 @@
 					</h2>
 					<div id="collapseLang" class="accordion-collapse collapse" aria-labelledby="headerLang" data-bs-parent="#headerLang">
 						<div name="lang" class="accordion-body">
-							<div id="inputLang">
-
-							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="langSubmit">Submit</button>
+							<p class="help-text">Please select a major language group (sometimes called macro languages, or language families).</p>
+							<p class="hedge">This list contains the <a href="https://www.ethnologue.com/insights/ethnologue200/">top 20 most spoken languages according to Ethnologue</a>. We recognize this list is far from inclusive, but hope to one day include more.</p>
+							<p class="hedge">As a prototype, only some of the following options are populated in our database. Currently English and Arabic contain the most complete entries.</p>
+							<div id="inputLang"></div>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitLang">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -84,26 +84,42 @@
 					</h2>
 					<div id="collapseDialect" class="accordion-collapse collapse" aria-labelledby="headerDialect" data-bs-parent="#headerDialect">
 						<div name="dialect" class="accordion-body">
-							<div id="inputDialect">
-
-							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="dialectSubmit">Submit</button>
+							<p class="help-text">If your dialect is more finely grained, you can further edit it and the country list in the next section.</p>
+							<div id="inputDialect"></div>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitDialect">Submit</button>
 						</div>
 					</div>
 				</div>
 
 				<div class="accordion-item">
-					<h2 class="accordion-header" id="headerDialectBias">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDialectBias" aria-expanded="false" aria-controls="collapseDialectBias">
-							Dialect Biases
+					<h2 class="accordion-header" id="headerCountry">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCountry" aria-expanded="false" aria-controls="collapseCountry">
+							Country
 						</button>
 					</h2>
-					<div id="collapseDialectBias" class="accordion-collapse collapse" aria-labelledby="headerDialectBias" data-bs-parent="#headerDialectBias">
-						<div name="dialectBias" class="accordion-body">
-							<div id="inputDialectBias">
+					<div id="collapseCountry" class="accordion-collapse collapse" aria-labelledby="headerCountry" data-bs-parent="#headerCountry">
+						<div name="country" class="accordion-body">
+							<div id="inputCountry"></div>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitCountry">Submit</button>
+						</div>
+					</div>
+				</div>
 
-							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="dialectBiasSubmit">Submit</button>
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headerFormalityContext">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormalityContext" aria-expanded="false" aria-controls="collapseFormalityContext">
+							Formality and Conversation Context
+						</button>
+					</h2>
+					<div id="collapseFormalityContext" class="accordion-collapse collapse" aria-labelledby="headerFormalityContext" data-bs-parent="#headerFormalityContext">
+						<div name="formalityContext" class="accordion-body">
+							<h5 class="suggested-h5">Dialect Formality</h5>
+							<p class="help-text">Formality refers to the one aspect of the social context in which a language is exchanged, often influencing structure and complexity of the language. For example, a speech given presented to a conference would be formal, whereas a conversation between friends that includes lots of slang would be informal.</p>
+							<div id="inputFormality"></div>
+							<h5 class="suggested-h5">Context</h5>
+							<p class="help-text">Here context refers to the genre or type of platform in which the text was originally written or spoken.</p>
+							<div id="inputContext"></div>
+							<button class="btn btn-secondary" type="button" name="submit" id="submitFormalityContext">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -111,48 +127,47 @@
 				<div class="accordion-item">
 					<h2 class="accordion-header" id="headerDates">
 						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDates" aria-expanded="false" aria-controls="collapseCheckboxes1">
-							Generation and Collection Dates
+							Timestamps and Collection Dates
 						</button>
 					</h2>
 					<div id="collapseDates" class="accordion-collapse collapse" aria-labelledby="collapseDates" data-bs-parent="#collapseDates">
 						<div name="dates" class="accordion-body">
 							<div id="inputDates">
+								<p class="help-text">Timestamps are the dates when the data itself was generated. For example, a social media post was written by the user on X day and time.</p>
+
 								<form class="form-inline">
 								<div class="form-group" style="display: block;">
-									<label for="startDateGen">Data Timestamp, earliest date:</label>
-						            <input id="startDateGen" class="form-control" type="date" style="display: inline-block; width: 140px;" />
-						            	<label class="checkbox-inline">
-									</label>
-							        <input type="checkbox" id="startDateGenEst" value="false"> Estimated
+									<label for="startTimestamp">Data Timestamp, earliest date:</label>
+						            <input id="startTimestamp" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            <label for="startTimestampEst" class="checkbox-inline"></label>
+							        <input type="checkbox" id="startTimestampEst" value="false"> Estimated
 						       	</div>
 
 						       	<div class="form-group" style="display: block;">
-						       		<label for="endDateGen">Data Timestamp, latest date:</label>
-						            <input id="endDateGen" class="form-control" type="date" style="display: inline-block; width: 140px;" />
-						            	<label class="checkbox-inline">
-									</label>
-							        <input type="checkbox" id="endDateGenEst" value="false"> Estimated
+						       		<label for="endTimestamp">Data Timestamp, latest date:</label>
+						            <input id="endTimestamp" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            <label for="endTimestampEst" class="checkbox-inline"></label>
+							        <input type="checkbox" id="endTimestampEst" value="false"> Estimated
+						       	</div>
+
+						       	<p class="help-text" style="margin-top: 16px;">Collection dates are when you as a researcher accessed and aggregated entries. For example, the dates when you scraped a social media site for posts.</p>
+						       	<div class="form-group" style="display: block;">
+						        	<label for="startCol">Data Collection, earliest date:</label>
+						            <input id="startCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            <label for="startColEst" class="checkbox-inline"></label>
+									<input type="checkbox" id="startColEst" value="false"> Estimated
 						       	</div>
 
 						       	<div class="form-group" style="display: block;">
-						        	<label for="startDateCol">Data Collection, earliest date:</label>
-						            <input id="startDateCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
-						            	<label class="checkbox-inline">
-									</label>
-									<input type="checkbox" id="startDateColEst" value="false"> Estimated
-						       	</div>
-
-						       	<div class="form-group" style="display: block;">
-						       		<label for="endDateCol">Data Collection, latest date:</label>
-						            <input id="endDateCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
-						            	<label class="checkbox-inline">
-									</label>
-							        <input type="checkbox" id="endDateColEst" value="false"> Estimated
+						       		<label for="endCol">Data Collection, latest date:</label>
+						            <input id="endCol" class="form-control" type="date" style="display: inline-block; width: 140px;" />
+						            <label for="endColEst" class="checkbox-inline"></label>
+							        <input type="checkbox" id="endColEst" value="false"> Estimated
 						       	</div>
 
 					        </form>
 							</div>
-							<button class="btn btn-secondary" type="button" name="submit" id="dateSubmit">Submit</button>
+							<button class="btn btn-secondary" type="button" name="finish" id="finish">Finish</button>
 						</div>
 					</div>
 				</div>
@@ -162,6 +177,16 @@
 	</div>
 </div>
 
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div id="reportContainer">
+				<h2 id="reportHeader">Bias Report</h2>
+				<div id="reportBody"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>

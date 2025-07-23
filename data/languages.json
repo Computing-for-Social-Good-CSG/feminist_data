@@ -1,65 +1,70 @@
 {
     "Languages":{
-      "English":{
-        "Countries":{}
-      },
+      "English":{},
       "Chinese":{
-        "Countries":{},
+        "Countries":["China"],
         "Dialects":{
-          "Mandarin":{},
-          "Cantonese":{},
-          "Wu":{}
+          "Mandarin":{
+            "Countries":["China"],
+            "Context":["Education"],
+            "Formality":"Formal"
+          },
+          "Cantonese (Yue)":{
+            "Countries":["China","Hong Kong", "Macao"],
+            "Context":["Education", "Spoken (conversational)"] 
+          },
+          "Wu":{
+            "Countries":["China","Hong Kong", "Macao"],
+            "Context":["Spoken (conversational)"]         
+          }
         }
       },
       "Hindi":{},
       "Spanish":{},
       "Arabic":{
-        "Countries":{},
+        "Countries":["Algeria", "Bahrain", "Comoros", "Djibouti", "Egypt", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Libya", "Mauritania", "Morocco", "Oman", "Palestine", 
+          "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia", "Turkey", "United Arab Emirates", "Yemen"],
         "Dialects":{
           "Classical Arabic":{
-            "Countries":[],
-            "Context":["Historical", "Poetry", "Religious (Qur'an)"],
+            "Context":["Historical", "Literature", "Religious"],
             "Formality":"Formal"
           },
           "Egyptian Arabic":{
             "Countries":["Egypt", "Sudan"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Gulf Arabic":{
             "Countries":["Bahrain", "Kuwait", "Oman", "Qatar", "Saudi Arabia", "United Arab Emirates"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Iraqi":{
             "Countries":["Iraq", "Kuwait", "Qatar", "Saudi Arabia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Levantine Arabic":{
             "Countries":["Israel", "Jordan", "Lebanon", "Palestine", "Syria", "Turkey"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Maghrebi":{
             "Countries":["Algeria", "Libya", "Mauritania", "Morocco", "Tunisia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           },
           "Modern Standard Arabic":{
-            "Countries":[],
-            "Context":["Academica", "Education", "Law", "Literature", "News"],
+            "Context":["Academia", "Education", "Law", "Literature", "News"],
             "Formality":"Formal"
           },
           "Yemeni Arabic":{
             "Countries":["Yemen", "Saudi Arabia"],
-            "Context":["Social Media", "Spoken, conversational"],
+            "Context":["Social Media", "Spoken (conversational)"],
             "Formality":"Vernacular"
           }, 
           "Other":{
-            "Countries":["Djibouti", "Comoros", "Somanlia"],
-            "Context":null,
-            "Formality":null
+            "Countries":["Djibouti", "Comoros", "Somalia"]
           }
         }
       },
@@ -77,6 +82,5 @@
       "Telugu":{},
       "Hausa":{},
       "Turkish":{}
-    },
-    "Country": ["Spain","Australia","Monaco"]
+    }
 }

@@ -1,3 +1,24 @@
+h1 { 
+	margin-top: 30px;
+	margin-bottom: 25px;
+}
+#lastIntroPara {
+	margin-bottom: 30px;
+}
+.hedge { 
+	color: gray;
+	font-style: italic;
+}
+.btn.btn-secondary[name="submit"] { 
+	margin-top: 16px;
+}
+.btn-outline-secondary {
+	display: block;
+	margin-top: 12px;
+}
+.help-title {
+	color: gray;
+}
 .cite-text {
 	display: inline-block;
 	margin-bottom: 2px;
@@ -7,4 +28,66 @@
 	font-size: 12px;
 	color: gray;
 	margin-bottom: 1rem;
+}
+.suggested-h6 {}
+.suggested-h5 {
+	padding-top: 20px;
+}
+.text-entry-holder {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+.form-group.text-entry-holder { 
+	margin-left: 24px;
+}
+input[type="text"] {
+	width: calc(100% - 200px);
+	float: right;
+}
+
+/* Final Report */
+#reportContainer {
+	margin-top: 30px;
+	margin-bottom: 50px;
+	border-top: 1px solid #dee2e6;
+	border-right: 1px solid #dee2e6;
+	border-left: 1px solid #dee2e6;
+	border-radius: 6px;
+}
+#reportHeader {
+	margin-bottom: 0px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-bottom: 1px solid #dee2e6;
+	font-size: 16px;
+}
+#reportBody .row {
+	margin-left: 0px;
+	margin-right: 0px;
+	border-bottom: 1px solid #dee2e6;
+}
+.report-title {}
+.report-title p {
+	padding-top: 16px;
+	padding-bottom: 16px;
+	padding-left: 6px;
+	padding-right: 6px;
+	margin-bottom: 0px;
+	line-height: 18px;
+}
+.report-value p {
+	padding-top: 16px;
+	padding-bottom: 16px;
+	padding-left: 6px;
+	padding-right: 6px;
+	margin-bottom: 0px;
+	line-height: 18px;
+}
+.report-value .cite-text {
+	padding-bottom: 2px;
+}
+.report-value a {
+	padding-left: 6px;
 }
