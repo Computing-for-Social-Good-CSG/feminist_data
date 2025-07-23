@@ -154,7 +154,6 @@ export function inputOtherFactory(containerId, inputId, inputName, otherCounter)
     var formCheck = inputFactory(containerId, useId, "checkbox", inputName);
     formCheck.classList.add("text-entry-holder");
     if (!otherCounter) {
-        console.log("NOT OTHER");
         formCheck.querySelector("label").innerText = useId + ":";
     }
     
@@ -225,11 +224,6 @@ export function updateBiases(dataSourceArr, data_obj, otherCounter){
         data_obj.gender_cite = biasArr["gender_cite"];
         data_obj.gender_link = biasArr["gender_link"];
     }
-    if (document.getElementById("Language").checked) {
-        data_obj.lang = biasArr["Language"];
-        data_obj.lang_cite = biasArr["lang_cite"];
-        data_obj.lang_link = biasArr["lang_link"];
-    }
     if (document.getElementById("Race").checked) {
         data_obj.race = biasArr["Race"];
         data_obj.race_cite = biasArr["race_cite"];
@@ -240,7 +234,10 @@ export function updateBiases(dataSourceArr, data_obj, otherCounter){
         data_obj.class_cite = biasArr["class_cite"];
         data_obj.class_link = biasArr["class_link"];
     }
-    if (document.getElementById("Other1").checked) { 
+    if (document.getElementById("Other1")) { 
+
+        // TODO check if the box is selected
+
         for (var i=1; i<=otherCounter; i++) {
             var useId = "Other" + i;
             var itemArr = [];
@@ -282,7 +279,6 @@ export function removeItems(arr, toRemove) {
 
     for (var i=0; i<arr.length; i++) {
         var index = arr.indexOf(toRemove[i]);
-        
         if (index == -1) {
             result.push(arr[i]);
         }
@@ -334,5 +330,7 @@ export function populateReportBias(containerId, itemName, itemValue, citation, u
         link.setAttribute("href", url);
         link.classList.add("cite-link");
         val_div.appendChild(link);
+
+        return(val_div);
     }
 }

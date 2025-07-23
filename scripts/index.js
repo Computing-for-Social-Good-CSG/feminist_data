@@ -101,7 +101,6 @@ function doCollapse(buttonParent) {
 
 // populate Data Source and Macro Languages 
 utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
-utils.populateInputGroup("inputLang", Object.keys(langArr), "checkbox", "lang");
 
 // when Data Source is submitted, populate suggested biases 
 document.getElementById("submitSource").addEventListener("click", function(event){
@@ -110,6 +109,7 @@ document.getElementById("submitSource").addEventListener("click", function(event
     // remove existing items (in case of resubmission)
     utils.removeChildOfClass("inputSourceBias","form-check");
     utils.removeChildOfClass("inputSourceBias", "suggested-h6");
+    utils.removeChildOfClass("inputSourceBias", "form-group");
     // get parent item (use later to check empty selection and collapse accordion) 
     var parent = event.target.parentElement;
     // update data object 
@@ -150,10 +150,47 @@ document.getElementById("sourceBiasAddOther").addEventListener("click", function
     utils.inputOtherFactory("inputSourceBias", "Other", "sourceBias", sourceBiasOtherCounter);
 })
 
-// when Data Source Biases are submitted, update database 
+// when Data Source Biases are submitted, update database and populate languages 
 document.getElementById("submitSourceBias").addEventListener("click", function(event) {
+    utils.removeChildOfClass("inputLang", "suggested-h6");
+    utils.removeChildOfClass("inputLang", "form-check");
+
     var parent = event.target.parentElement;
     utils.updateBiases(dataSourceArr, d, sourceBiasOtherCounter);
+
+    // update language bias 
+    var biasArr = dataSourceArr[d.data_source].Biases;
+    var itemLangArr = [];
+    if (document.getElementById("Language").checked) {
+
+        // search for the name of the language in our database 
+        for (var i=0; i<Object.keys(langArr).length; i++) {
+
+            if (biasArr["Language"].includes(Object.keys(langArr)[i])) {
+                itemLangArr.push(Object.keys(langArr)[i]);
+                itemLangArr.push(biasArr["lang_cite"]);
+                itemLangArr.push(biasArr["lang_link"]);
+                itemLangArr.push(biasArr["Language"]);
+                break;
+            }
+        }
+        d.lang[0] = itemLangArr;
+    }
+
+    // populate languages 
+    var otherLangs = Object.keys(langArr);
+    if (d.lang.length > 0) {
+        var headerText = "Suggested language(s) for the data source(s): " + d.data_source;
+        utils.populateSuggestedHeader("inputLang", headerText);
+        utils.inputFactory("inputLang", d.lang[0][0], "checkbox", "lang", null, null, true);
+
+        otherLangs = utils.removeItems(otherLangs, [d.lang[0][0]]);
+
+        var headerText = "Other languages:";
+        utils.populateSuggestedHeader("inputLang", headerText);
+    }
+
+    utils.populateInputGroup("inputLang", otherLangs, "checkbox", "lang");
     doCollapse(parent);
 });
 
@@ -164,7 +201,19 @@ document.getElementById("submitLang").addEventListener("click", function(event) 
     utils.removeChildOfClass("inputDialect", "suggested-h5");
     var parent = event.target.parentElement;
     var langNodes = parent.querySelectorAll(`[name*="lang"]:checked`);
-    d.lang = Array.from(langNodes).map(checkbox => checkbox.value);
+    langNodes = Array.from(langNodes).map(checkbox => checkbox.value);
+    var langList = [];
+
+    // if there is already a language from data source 
+    if (d.lang[0].length == 4) {
+        langList.push(d.lang[0][0]); 
+        for (var i=0; i<langNodes.length; i++) {
+            if (!langList.includes(langNodes[i])) {
+                langList.push(langNodes[i]);
+                d.lang.push([langNodes[i]]);
+            }
+        }
+    }
     
     var empty = isEmpty(parent);
     if (empty) {
@@ -173,16 +222,16 @@ document.getElementById("submitLang").addEventListener("click", function(event) 
     }
 
     // populate Dialects based on Macro Languages 
-    for(var i=0; i<d.lang.length; i++) {
+    for(var i=0; i<langList.length; i++) {
 
         // no dialect data, break out early 
-        if (!langArr[d.lang[i]].hasOwnProperty("Dialects")) {
-            var headerText = "No suggested dialects for the language: " + d.lang[i];
+        if (!langArr[langList[i]].hasOwnProperty("Dialects")) {
+            var headerText = "No suggested dialects for the language: " + langList[i];
             utils.populateSuggestedHeader("inputDialect", headerText, "h5");
             continue; 
         }
 
-        var headerText = "Suggested dialects based on the language: " + d.lang[i];
+        var headerText = "Suggested dialects based on the language: " + langList[i];
         utils.populateSuggestedHeader("inputDialect", headerText, "h5");
         var dialectArr = langArr[d.lang[i]].Dialects;
         var dialectCountries = [];
@@ -209,13 +258,13 @@ document.getElementById("submitDialect").addEventListener("click", function(even
         d.dialect_by_lang[x] = [];
 
         // no country data for the language, break out early 
-        if (!langArr[d.lang[x]].hasOwnProperty("Countries")) {
-            var headerText = "No suggested countries for the language: " + d.lang[x];
+        if (!langArr[d.lang[x][0]].hasOwnProperty("Countries")) {
+            var headerText = "No suggested countries for the language: " + d.lang[x][0];
             utils.populateSuggestedHeader("inputCountry", headerText, "h5");
             continue; 
         } else {
-            var langCountries = langArr[d.lang[x]].Countries;
-            var headerText = "For the language: " + d.lang[x];
+            var langCountries = langArr[d.lang[x][0]].Countries;
+            var headerText = "For the language: " + d.lang[x][0];
             utils.populateSuggestedHeader("inputCountry", headerText, "h5");
 
             // populate suggested Countries
@@ -224,11 +273,11 @@ document.getElementById("submitDialect").addEventListener("click", function(even
             for (var i=0; i<d.dialect.length; i++) {
 
                 // if the dialect exists in this language 
-                var allLangDialects = Object.keys(langArr[d.lang[x]].Dialects);
+                var allLangDialects = Object.keys(langArr[d.lang[x][0]].Dialects);
                 if (allLangDialects.includes(d.dialect[i])) {
                     d.dialect_by_lang[x] = d.dialect_by_lang[x].concat(d.dialect[i]);
-                    if (langArr[d.lang[x]].Dialects[d.dialect[i]].Countries) {
-                        suggestedCountries = suggestedCountries.concat(langArr[d.lang[x]].Dialects[d.dialect[i]].Countries);
+                    if (langArr[d.lang[x][0]].Dialects[d.dialect[i]].Countries) {
+                        suggestedCountries = suggestedCountries.concat(langArr[d.lang[x][0]].Dialects[d.dialect[i]].Countries);
                     } else {
                         // there is a dialect, but it's not associated with countries 
                         noCountryDialects = noCountryDialects.concat(d.dialect[i]);
@@ -263,10 +312,10 @@ document.getElementById("submitDialect").addEventListener("click", function(even
                 }
             }
             if (otherCountries.length == 0) {
-                var headerText = "No other countries based on the language: " + d.lang[x];
+                var headerText = "No other countries based on the language: " + d.lang[x][0];
                 utils.populateSuggestedHeader("inputCountry", headerText);
             } else {
-                var headerText = "Other countries based on the language: " + d.lang[x];
+                var headerText = "Other countries based on the language: " + d.lang[x][0];
                 utils.populateSuggestedHeader("inputCountry", headerText);
                 otherCountries.sort();
                 utils.populateInputGroup("inputCountry", otherCountries, "checkbox", "countries");
@@ -303,14 +352,14 @@ document.getElementById("submitCountry").addEventListener("click", function(even
 
     // find suggested formality and contexts by dialect
     for (var x=0; x<d.lang.length; x++) {
-        if (langArr[d.lang[x]].hasOwnProperty("Dialects")) {
+        if (langArr[d.lang[x][0]].hasOwnProperty("Dialects")) {
             for (var i=0; i<d.dialect_by_lang[x].length; i++) {
-                if (langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Formality) {
-                    suggestForm = suggestForm.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Formality);
+                if (langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Formality) {
+                    suggestForm = suggestForm.concat(langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Formality);
                     suggestFormFrom.push(d.dialect_by_lang[x][i]);
                 } 
-                if (langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Context) {
-                    suggestContext = suggestContext.concat(langArr[d.lang[x]].Dialects[d.dialect_by_lang[x][i]].Context);
+                if (langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Context) {
+                    suggestContext = suggestContext.concat(langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Context);
                     suggestContextFrom.push(d.dialect_by_lang[x][i]);
                 } 
             }
@@ -391,15 +440,27 @@ document.getElementById("submitFormalityContext").addEventListener("click", func
 // generate final print out 
 document.getElementById("finish").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
+    utils.populateReportItem("reportBody", "Data Source", d.data_source); 
 
-    utils.populateReportItem("reportBody", "Data Source", d.data_source);  
-    utils.populateReportItem("reportBody", "Language", d.lang);
+    if (d.lang[0].length == 4) {
+        var val_div = utils.populateReportBias("reportBody", "Language", d.lang[0][3], d.lang[0][1], d.lang[0][2]);
+        if (d.lang.length > 1) {
+            var val = document.createElement("p");
+            if (d.lang.slice(1).length > 1) {
+                val.innerText = d.lang.slice(1).join(", ");
+            } else {
+                val.innerText = d.lang.slice(1);
+            }
+            val_div.appendChild(val);
+        }
+    } else {
+        utils.populateReportItem("reportBody", "Language", d.lang);
+    }
+
     utils.populateReportItem("reportBody", "Dialect", d.dialect);  
     utils.populateReportItem("reportBody", "Country", d.country_arr);
     utils.populateReportItem("reportBody", "Formality", d.formality);
     utils.populateReportItem("reportBody", "Conversation Context", d.context);
-
-    console.log(d.age);
 
     utils.populateReportBias("reportBody", "Age", d.age, d.age_cite, d.age_link);
     utils.populateReportBias("reportBody", "Gender", d.gender, d.gender_cite, d.gender_link);
