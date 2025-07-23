@@ -126,11 +126,11 @@ document.getElementById("submitSource").addEventListener("click", function(event
     if (dataSourceArr[d.data_source].hasOwnProperty("Biases")) {
 
         // populate known biases
-        var headerText = "Suggested biases based on the source: " + d.data_source;
+        var headerText = "Suggested biases based on the data source: " + d.data_source;
         utils.populateSuggestedHeader("inputSourceBias", headerText);
         knownBiases = utils.populateCiteGroup("inputSourceBias", dataSourceArr[d.data_source].Biases, "sourceBias");
     } else {
-        var headerText = "No suggested biases based on the source: " + d.data_source;
+        var headerText = "No suggested biases based on the data source: " + d.data_source;
         utils.populateSuggestedHeader("inputSourceBias", headerText);
     }
 
@@ -325,7 +325,7 @@ document.getElementById("submitDialect").addEventListener("click", function(even
     doCollapse(parent);
 });
 
-// when Countries are submitted, populate Conversation Contexts and Formality 
+// when Countries are submitted, populate Context and Formality 
 document.getElementById("submitCountry").addEventListener("click", function(event){
     utils.removeChildOfClass("inputFormality", "form-check");
     utils.removeChildOfClass("inputFormality", "suggested-h6");
@@ -380,21 +380,21 @@ document.getElementById("submitCountry").addEventListener("click", function(even
     }
     
     if (suggestContext.length > 0) {
-        var headerText = "Suggested conversational contexts from: " + suggestContextFrom.join(", ");
+        var headerText = "Suggested contexts from: " + suggestContextFrom.join(", ");
         utils.populateSuggestedHeader("inputContext", headerText);
         suggestContext = [... new Set(suggestContext)];
         utils.populateInputGroup("inputContext", suggestContext, "checkbox", "context", null, null, true);
         var otherContext = utils.removeItems(baseContextList, suggestContext);
         utils.populateInputGroup("inputContext", otherContext, "checkbox", "context");
     } else { 
-        var headerText = "No suggested conversational contexts based on selected data sources or dialects.";
+        var headerText = "No suggested contexts based on selected data sources or dialects.";
         utils.populateSuggestedHeader("inputContext", headerText);
         utils.populateInputGroup("inputContext", baseContextList, "checkbox", "context");
     }    
     doCollapse(parent);
 });
 
-// when Formality and Conversation Context are submitted, open dates 
+// when Formality and Context are submitted, open dates 
 document.getElementById("submitFormalityContext").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
     var formalityNodes = parent.querySelectorAll(`[name*="formality"]:checked`);
@@ -460,7 +460,7 @@ document.getElementById("finish").addEventListener("click", function(event) {
     utils.populateReportItem("reportBody", "Dialect", d.dialect);  
     utils.populateReportItem("reportBody", "Country", d.country_arr);
     utils.populateReportItem("reportBody", "Formality", d.formality);
-    utils.populateReportItem("reportBody", "Conversation Context", d.context);
+    utils.populateReportItem("reportBody", "Context", d.context);
 
     utils.populateReportBias("reportBody", "Age", d.age, d.age_cite, d.age_link);
     utils.populateReportBias("reportBody", "Gender", d.gender, d.gender_cite, d.gender_link);

@@ -16,13 +16,10 @@
 		<div class="col">
 			<h1>Data Feminism Bias Report Generator</h1>
 			<h4>Introduction</h2>
-			<p>This is a prototype tool for authors of NLP research papers to report biases related to their datasets. It dynamically adapts to information about the dataset as you add it to suggest possible biases. Each bias includes a citation to published statistics and previous research.</p>
-			<p>If there is a research paper you think should be added to the tool, you can <a href="#">suggested it through this form</a>.</p>
+			<p>This is a prototype tool for authors of NLP research papers to report biases related to their datasets. It dynamically adapts to information about the dataset as you add it to suggest possible biases.</p>
+			<p>If there is a research paper you think should be added to the tool, you can <a href="https://forms.gle/HE3HAQCotgwe11JA7">suggested it through this form</a>.</p>
 			<p>All code for the prototype is published <a href="https://github.com/Computing-for-Social-Good-CSG/feminist_data">on our GitHub</a>.</p>
-			<p>You can also <a href="#">read the paper (forthcoming)</a> to understand the research upon which this prototype is based.</p>
-
-			<h4>Inspiration</h2>
-			<p>There are other bias reporting paradigms that we drew inspiration from in creating this tool. Often they are tailored to other types of datasets or models, or reporting contexts. Additionally, most still rely on paper authors to generate potential sources of bias, whereas our tool proactively suggests them. See <a href="https://github.com/Computing-for-Social-Good-CSG/feminist_data">the GitHub</a> for a complete list.</p>
+			<p id="lastIntroPara">You can also <a href="https://dl.acm.org/doi/10.1145/3715275.3732119">read the paper</a> to understand the research that motivated this prototype.</p>
 		</div>
 	</div>
 </div>
@@ -39,7 +36,8 @@
 					</h2>
 					<div id="collapseDataSource" class="accordion-collapse collapse show" aria-labelledby="headerDataSource" data-bs-parent="#collapseDataSource">
 						<div name="dataSource" class="accordion-body">
-							<p class="help-text">Only one item can be selected. If your data come from more than one source, we recommend filling out multiple forms.</p>
+							<p class="help-text">Select only one item. If your data come from more than one source, we recommend filling out multiple forms.</p>
+							<p class="hedge">As a prototype, only some of the following options are populated in our database. Currently Reddit and Wikipedia contain the most complete entries.</p>
 							<div id="inputDataSource"></div>
 							<button class="btn btn-secondary" type="button" name="submit" id="submitSource">Submit</button>
 						</div>
@@ -70,6 +68,8 @@
 					<div id="collapseLang" class="accordion-collapse collapse" aria-labelledby="headerLang" data-bs-parent="#headerLang">
 						<div name="lang" class="accordion-body">
 							<p class="help-text">Please select a major language group (sometimes called macro languages, or language families).</p>
+							<p class="hedge">This list contains the <a href="https://www.ethnologue.com/insights/ethnologue200/">top 20 most spoken languages according to Ethnologue</a>. We recognize this list is far from inclusive, but hope to one day include more.</p>
+							<p class="hedge">As a prototype, only some of the following options are populated in our database. Currently English and Arabic contain the most complete entries.</p>
 							<div id="inputLang"></div>
 							<button class="btn btn-secondary" type="button" name="submit" id="submitLang">Submit</button>
 						</div>
@@ -114,8 +114,10 @@
 					<div id="collapseFormalityContext" class="accordion-collapse collapse" aria-labelledby="headerFormalityContext" data-bs-parent="#headerFormalityContext">
 						<div name="formalityContext" class="accordion-body">
 							<h5 class="suggested-h5">Dialect Formality</h5>
+							<p class="help-text">Formality refers to the one aspect of the social context in which a language is exchanged, often influencing structure and complexity of the language. For example, a speech given presented to a conference would be formal, whereas a conversation between friends that includes lots of slang would be informal.</p>
 							<div id="inputFormality"></div>
-							<h5 class="suggested-h5">Conversation Context</h5>
+							<h5 class="suggested-h5">Context</h5>
+							<p class="help-text">Here context refers to the genre or type of platform in which the text was originally written or spoken.</p>
 							<div id="inputContext"></div>
 							<button class="btn btn-secondary" type="button" name="submit" id="submitFormalityContext">Submit</button>
 						</div>
