@@ -349,15 +349,20 @@ document.getElementById("submitCountry").addEventListener("click", function(even
 
     // find suggested formality and contexts by dialect
     for (var x=0; x<d.lang.length; x++) {
-        if (langArr[d.lang[x][0]].hasOwnProperty("Dialects")) {
+        var xLang = d.lang[x][0];
+        if (langArr[xLang].hasOwnProperty("Dialects")) {
             for (var i=0; i<d.dialect_by_lang[x].length; i++) {
-                if (langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Formality) {
-                    suggestForm = suggestForm.concat(langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Formality);
-                    suggestFormFrom.push(d.dialect_by_lang[x][i]);
+                var xDialect = d.dialect_by_lang[x][i];
+                if (langArr[xLang].Dialects[xDialect].Formality) {
+                    var xForms = langArr[xLang].Dialects[xDialect].Formality;
+                    if (!suggestForm.includes(xForms)) {
+                        suggestForm = suggestForm.concat(xForms);
+                    }
+                    suggestFormFrom.push(xDialect);
                 } 
-                if (langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Context) {
-                    suggestContext = suggestContext.concat(langArr[d.lang[x][0]].Dialects[d.dialect_by_lang[x][i]].Context);
-                    suggestContextFrom.push(d.dialect_by_lang[x][i]);
+                if (langArr[xLang].Dialects[xDialect].Context) {
+                    suggestContext = suggestContext.concat(langArr[xLang].Dialects[xDialect].Context);
+                    suggestContextFrom.push(xDialect);
                 } 
             }
         } 
@@ -366,8 +371,10 @@ document.getElementById("submitCountry").addEventListener("click", function(even
     if (suggestForm.length > 0) {
         var headerText = "Suggested formalities from: " + suggestFormFrom.join(", ");
         utils.populateSuggestedHeader("inputFormality", headerText);
-        suggestForm = [... new Set(suggestForm)];
         utils.populateInputGroup("inputFormality", suggestForm, "checkbox", "formality", null, null, true);
+
+        var headerText = "Other formalities: ";
+        utils.populateSuggestedHeader("inputFormality", headerText);
         var otherForm = utils.removeItems(baseFormalityList, suggestForm);
         utils.populateInputGroup("inputFormality", otherForm, "checkbox", "formality");
     } else {
