@@ -1,4 +1,4 @@
-# Bias Reporting Tool and Data Feminism Research Paper Dataset 
+# Data Feminism Bias Reporting Tool Repository
 
 [[Read the Paper](https://dl.acm.org/doi/10.1145/3715275.3732119)] [[Use the Bias Reporting Tool](https://computing-for-social-good-csg.github.io/feminist_data/)]
 
