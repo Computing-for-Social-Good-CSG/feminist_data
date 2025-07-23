@@ -5,12 +5,9 @@ var currentAccordion = 0;
 const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 const baseFormalityList = ["Honorific", "Formal", "Vernacular", "Informal/Slang"];
 const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken (conversational)", "Social Media"];
-
-// -- CHANGE BACK BEFORE PUSHING 
-// var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
-var langArr = utils.pullData("Languages", "data/languages.json");
-// var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
-var dataSourceArr = utils.pullData("Data Sources", "data/data_sources.json");
+ 
+var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
+var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 
 class Dataset {
     constructor () {
@@ -410,32 +407,32 @@ document.getElementById("submitFormalityContext").addEventListener("click", func
     doCollapse(parent);
 });
 
-// document.getElementById("submitDate").addEventListener("click", function(event){
+document.getElementById("finish").addEventListener("click", function(event){
 
-//     // requires all dates filled
-//     var parent = event.target.parentElement;
-//     var dates = parent.querySelectorAll(`[type*="date"]`);
-//     for (var i = 0; i < dates.length; i++) {
-//         if(dates[i].value == "") {
-//             console.log("Empty date, taking no action");
-//             return false;
-//         }
-//     }
+    // requires all dates filled
+    var parent = event.target.parentElement;
+    var dates = parent.querySelectorAll(`[type*="date"]`);
+    for (var i = 0; i < dates.length; i++) {
+        if(dates[i].value == "") {
+            console.log("Empty date, taking no action");
+            return false;
+        }
+    }
 
-//     if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
-//        d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);
-//     }
-//     if (d.set('timestamp_end', document.getElementById('endTimestamp').value)) {
-//         d.set('timestamp_end_est', document.getElementById('endTimestampEst').checked);
-//     }
-//     if (d.set('collect_date_start', document.getElementById('startCol').value)) {
-//         d.set('collect_date_start_est', document.getElementById('startColEst').checked);
-//     }
-//     if (d.set('collect_date_end', document.getElementById('endCol').value)) {
-//         d.set('collect_date_end_est', document.getElementById('endColEst').checked);
-//     }
-//     doCollapse(parent);
-// });
+    if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
+       d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);
+    }
+    if (d.set('timestamp_end', document.getElementById('endTimestamp').value)) {
+        d.set('timestamp_end_est', document.getElementById('endTimestampEst').checked);
+    }
+    if (d.set('collect_date_start', document.getElementById('startCol').value)) {
+        d.set('collect_date_start_est', document.getElementById('startColEst').checked);
+    }
+    if (d.set('collect_date_end', document.getElementById('endCol').value)) {
+        d.set('collect_date_end_est', document.getElementById('endColEst').checked);
+    }
+    doCollapse(parent);
+});
 
 // generate final print out 
 document.getElementById("finish").addEventListener("click", function(event) {
@@ -471,6 +468,9 @@ document.getElementById("finish").addEventListener("click", function(event) {
             utils.populateReportBias("reportBody", "Other", otherBias[0], otherBias[1], otherBias[2]);
         }
     }
+
+    utils.populateReportItem("reportBody", "Timestamps", utils.dateRangeStr(d.timestamp_start, d.timestamp_start_est, d.timestamp_end, d.timestamp_end_est));
+    utils.populateReportItem("reportBody", "Collection", utils.dateRangeStr(d.collect_start, d.collect_start_est, d.collect_end, d.collect_end_est));
 
     doCollapse(parent);
 });

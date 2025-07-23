@@ -40,10 +40,6 @@ h1 {
 .form-group.text-entry-holder { 
 	margin-left: 24px;
 }
-.form-group label {
-	margin-left: 24px;
-	color: gray;
-}
 input[type="text"] {
 	width: calc(100% - 200px);
 	float: right;

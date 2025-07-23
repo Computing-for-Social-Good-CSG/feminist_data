@@ -334,3 +334,18 @@ export function populateReportBias(containerId, itemName, itemValue, citation, u
         return(val_div);
     }
 }
+
+export function dateRangeStr(startVal, startEst, endVal, endEst) {
+    var date_range = "";
+    if (startEst) {
+        date_range = startVal + "* to "; 
+    } else {
+        date_range = startVal + " to ";
+    }
+    if (endEst) { 
+        date_range = date_range+ endVal + "*";
+    }  else {
+        date_range = date_range + endVal;
+    }
+    return(date_range);
+}
