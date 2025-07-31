@@ -249,6 +249,28 @@ export function updateBiases(dataSourceArr, data_obj, otherCounter){
     }
 };
 
+export function wipeBiases(data_obj) {
+    data_obj.age = null;
+    data_obj.age_cite = null;
+    data_obj.age_link = null;
+    data_obj.country_arr = null;
+    data_obj.country_cite = null;
+    data_obj.country_link = null;
+    data_obj.dialect = [];
+    data_obj.dialect_by_lang = [];
+    data_obj.gender = null;
+    data_obj.gender_cite = null;
+    data_obj.gender_link = null;
+    data_obj.lang = [];
+    data_obj.race = null;
+    data_obj.race_cite = null;
+    data_obj.race_link = null;
+    data_obj.class = null;
+    data_obj.class_cite = null;
+    data_obj.class_link = null;
+    data_obj.bias_other = [];
+};
+
 // creates a header for suggested items 
 export function populateSuggestedHeader(containerId, text, type) {
     var container = document.getElementById(containerId);

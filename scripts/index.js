@@ -96,7 +96,7 @@ function doCollapse(buttonParent) {
     }
 }
 
-// populate Data Source and Macro Languages 
+// populate Data Sources 
 utils.populateInputGroup("inputDataSource", Object.keys(dataSourceArr), "radio", "dataSource");
 
 // when Data Source is submitted, populate suggested biases 
@@ -107,6 +107,8 @@ document.getElementById("submitSource").addEventListener("click", function(event
     utils.removeChildOfClass("inputSourceBias","form-check");
     utils.removeChildOfClass("inputSourceBias", "suggested-h6");
     utils.removeChildOfClass("inputSourceBias", "form-group");
+    // wipe stored data (in case of resubmission)
+    utils.wipeBiases(d);
     // get parent item (use later to check empty selection and collapse accordion) 
     var parent = event.target.parentElement;
     // update data object 
