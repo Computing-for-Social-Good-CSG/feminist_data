@@ -202,16 +202,26 @@ document.getElementById("submitLang").addEventListener("click", function(event) 
     var langList = [];
 
     // if there is already a language from data source 
-    if (d.lang[0].length == 4) {
-        langList.push(d.lang[0][0]); 
-        for (var i=0; i<langNodes.length; i++) {
-            if (!langList.includes(langNodes[i])) {
-                langList.push(langNodes[i]);
-                d.lang.push([langNodes[i]]);
-            }
+    var start_index = 0; 
+    if (d.lang.length > 0) {
+
+        // if the data source language is selected 
+        if (langNodes.includes(d.lang[0][0])) {
+            langList.push(d.lang[0][0]); 
+            start_index = 1;
+        } else {
+            d.lang = [];
         }
     }
-    
+
+    for (var i=start_index; i<langNodes.length; i++) {
+        if (!langList.includes(langNodes[i])) {
+            langList.push(langNodes[i]);
+            d.lang.push([langNodes[i]]);
+        }
+    }
+
+    // require a language to be selected
     var empty = isEmpty(parent);
     if (empty) {
         console.log("No selection, not taking any action")
@@ -249,6 +259,8 @@ document.getElementById("submitDialect").addEventListener("click", function(even
     var parent = event.target.parentElement;
     var dialectNodes = parent.querySelectorAll(`[name*="dialect"]:checked`);
     d.dialect = Array.from(dialectNodes).map(checkbox => checkbox.value);
+
+
 
     // loop through macro languages 
     for (var x=0; x<d.lang.length; x++) {
