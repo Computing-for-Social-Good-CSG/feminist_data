@@ -70,6 +70,10 @@
     "YouTube":{
       "Context":["Social Media"],
       "Formality":["Vernacular", "Informal/Slang"]
+    },
+    "X (formerly Twitter)":{
+      "Context":["Social Media"],
+      "Formality":["Vernacular", "Informal/Slang"]
     }  
   }
 }
