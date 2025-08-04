@@ -113,27 +113,29 @@ export function inputFactory(containerId, inputId, inputType, inputName, helpIte
 }
 
 // creates group of HTML objects with bias citation links 
+const baseBiasList = ["Age","Country","Language","Gender","Race","Socioeconomic Class"];
 export function populateCiteGroup(containerId, biasArr, inputName){
     var container = document.getElementById(containerId);
     var arrKeys = Object.keys(biasArr);
     var knownBiases = [];
 
     for (var i=0; i<arrKeys.length; i++){
-        if (i%3 == 0){
+        if (baseBiasList.includes(arrKeys[i])){
             knownBiases.push(arrKeys[i]);
+            var itemBiasArr = biasArr[arrKeys[i]];
 
             var formCheck = inputFactory(containerId, arrKeys[i], "checkbox", inputName, null, null, true);
 
             var citeText = document.createElement("p");
-            citeText.textContent = " : " + Object.values(biasArr)[i];
+            citeText.textContent = " : " + itemBiasArr[1];
             citeText.classList.add("cite-text");
             formCheck.appendChild(citeText);
 
             var link = document.createElement("a");
-            link.textContent = Object.values(biasArr)[i+1];
-            link.setAttribute("href", Object.values(biasArr)[i+2]);
+            link.textContent = itemBiasArr[2];
+            link.setAttribute("href", itemBiasArr[3]);
             link.classList.add("cite-link");
-            formCheck.appendChild(link);
+            formCheck.appendChild(link); 
         }        
     }
     return(knownBiases);
@@ -207,68 +209,38 @@ export function populateOtherGroup(containerId, titleList, inputName) {
 // When checking the boxes below citations, such as "Race" a null read error occurs
 // Needs a check to not read cite-text of other checkboxes in div, or will eventually be a non-issue as all get citation
 
-export function updateBiases(dataSourceArr, data_obj, otherCounter){
-    var biasArr = dataSourceArr[data_obj.data_source].Biases;
-    if (document.getElementById("Age").checked) {
-        data_obj.age = biasArr["Age"];
-        data_obj.age_cite = biasArr["age_cite"];
-        data_obj.age_link = biasArr["age_link"];
-    } 
-    if (document.getElementById("Country").checked) {
-        data_obj.country_arr = biasArr["Country"];
-        data_obj.country_cite = biasArr["country_cite"];
-        data_obj.country_link = biasArr["country_link"];
-    }
-    if (document.getElementById("Gender").checked) {
-        data_obj.gender = biasArr["Gender"];
-        data_obj.gender_cite = biasArr["gender_cite"];
-        data_obj.gender_link = biasArr["gender_link"];
-    }
-    if (document.getElementById("Race").checked) {
-        data_obj.race = biasArr["Race"];
-        data_obj.race_cite = biasArr["race_cite"];
-        data_obj.race_link = biasArr["race_link"];
-    }
-    if (document.getElementById("Socioeconomic Class").checked) {
-        data_obj.class = biasArr["Class"];
-        data_obj.class_cite = biasArr["class_cite"];
-        data_obj.class_link = biasArr["class_link"];
-    }
-    if (document.getElementById("Other1")) { 
+export function updateBiases(biasArr, selected, otherCounter) {  
+    var biasFromSource = [];
 
-        // TODO check if the box is selected
+    for (var i=0; i<selected.length; i++) {
 
-        for (var i=1; i<=otherCounter; i++) {
-            var useId = "Other" + i;
+        // known bias from project database 
+        if (biasArr != null && Object.keys(biasArr).includes(selected[i])) {
+            biasFromSource[selected[i]] = biasArr[selected[i]];
+
+        // known type of bias, user entered 
+        } else if (!selected[i].includes("Other")) {
+            var useId = selected[i];
             var itemArr = [];
             itemArr.push(document.getElementById(useId + "Entry").value);
             itemArr.push(document.getElementById(useId + "Cite").value);
             itemArr.push(document.getElementById(useId + "Link").value);
-            data_obj.bias_other.push(itemArr);
+            biasFromSource[useId] = itemArr;
         }
     }
-};
 
-export function wipeBiases(data_obj) {
-    data_obj.age = null;
-    data_obj.age_cite = null;
-    data_obj.age_link = null;
-    data_obj.country_arr = null;
-    data_obj.country_cite = null;
-    data_obj.country_link = null;
-    data_obj.dialect = [];
-    data_obj.dialect_by_lang = [];
-    data_obj.gender = null;
-    data_obj.gender_cite = null;
-    data_obj.gender_link = null;
-    data_obj.lang = [];
-    data_obj.race = null;
-    data_obj.race_cite = null;
-    data_obj.race_link = null;
-    data_obj.class = null;
-    data_obj.class_cite = null;
-    data_obj.class_link = null;
-    data_obj.bias_other = [];
+    // unknown type of bias, user entered 
+    for (var x=1; x<=otherCounter; x++) {
+        var useId = "Other" + x;
+        if (selected.includes(useId)) { 
+            var itemArr = [];
+            itemArr.push(document.getElementById(useId + "Entry").value);
+            itemArr.push(document.getElementById(useId + "Cite").value);
+            itemArr.push(document.getElementById(useId + "Link").value);
+            biasFromSource[useId] = itemArr;
+        }
+    }
+    return(biasFromSource);
 };
 
 // creates a header for suggested items 
@@ -293,18 +265,6 @@ export function removeChildOfClass(containerId, childClass) {
     for (var i=0; i<choppingBlock.length; i++){
         choppingBlock[i].remove();
     }
-}
-
-// remove items from an array
-export function removeItems(arr, toRemove) {
-    var result = [];
-    for (var i=0; i<arr.length; i++) {
-        var index = toRemove.indexOf(arr[i]);
-        if (index == -1) {
-            result.push(arr[i]);
-        }
-    }
-    return result;
 }
 
 // generate an item in final report 
@@ -340,19 +300,18 @@ export function populateReportItem(containerId, itemName, itemValue) {
     return(val_div);
 }
 
-export function populateReportBias(containerId, itemName, itemValue, citation, url) {
-    if (itemValue != null) {
-        var val_div = populateReportItem(containerId, itemName, itemValue);
+export function populateReportBias(containerId, itemName, item) {
+    if (item != null) {
+        if (Array.isArray(item)) { 
+            var val_div = populateReportItem(containerId, itemName, item[1]);
+            val_div.querySelector("p").classList.add("cite-text");
 
-        val_div.querySelector("p").classList.add("cite-text");
-
-        var link = document.createElement("a");
-        link.innerText = citation;
-        link.setAttribute("href", url);
-        link.classList.add("cite-link");
-        val_div.appendChild(link);
-
-        return(val_div);
+            var link = document.createElement("a");
+            link.innerText = item[2];
+            link.setAttribute("href", item[3]);
+            link.classList.add("cite-link");
+            val_div.appendChild(link);
+        } 
     }
 }
 
