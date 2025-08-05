@@ -138,7 +138,7 @@ document.getElementById("submitSource").addEventListener("click", function(event
 var sourceBiasOtherCounter = 0;
 document.getElementById("sourceBiasAddOther").addEventListener("click", function() {
     sourceBiasOtherCounter++;
-    utils.inputOtherFactory("inputSourceBias", "Other", "sourceBias", sourceBiasOtherCounter);
+    utils.inputOtherCite("inputSourceBias", "Other", "sourceBias", sourceBiasOtherCounter);
 })
 
 // when Data Source Biases are submitted, update database and populate languages 
@@ -169,6 +169,13 @@ document.getElementById("submitSourceBias").addEventListener("click", function(e
     doCollapse(parent);
 });
 
+// add "Other" Language on click 
+var langOtherCounter = 0;
+document.getElementById("langAddOther").addEventListener("click", function() {
+    langOtherCounter++;
+    utils.inputOtherFactory("inputLang", "Other", "lang", langOtherCounter);
+})
+
 // when Macro Language submitted, update Dialect options
 document.getElementById("submitLang").addEventListener("click", function(event) {
     utils.removeChildOfClass("inputDialect","form-check");
@@ -192,7 +199,14 @@ document.getElementById("submitLang").addEventListener("click", function(event) 
     // add other Languages 
     for (var i=0; i<langNodes.length; i++) {
         if (!Object.keys(d.lang).includes(langNodes[i])) {
-            d.lang[langNodes[i]] = [];
+
+            // if it's a user-entered language 
+            if (langNodes[i].includes("Other")) { 
+                var userLang = document.getElementById(langNodes[i] + "Entry").value;
+                d.lang[userLang] = [];
+            } else {
+                d.lang[langNodes[i]] = [];
+            }
         }
     }
 
@@ -208,7 +222,7 @@ document.getElementById("submitLang").addEventListener("click", function(event) 
         var l = Object.keys(d.lang)[i];
 
         // no dialect data, break out early 
-        if (!langArr[l].hasOwnProperty("Dialects")) {
+        if (!Object.keys(langArr).includes(l) || !langArr[l].hasOwnProperty("Dialects")) {
             var headerText = "No suggested dialects for the language: " + l;
             utils.populateSuggestedHeader("inputDialect", headerText, "h5");
             continue; 
@@ -253,7 +267,7 @@ document.getElementById("submitDialect").addEventListener("click", function(even
         d.dialect_by_lang[x] = [];
 
         // no country data for the language, break out early 
-        if (!langArr[l].hasOwnProperty("Countries")) {
+        if (!Object.keys(langArr).includes(l) || !langArr[l].hasOwnProperty("Countries")) {
             var headerText = "No suggested countries for the language: " + l;
             utils.populateSuggestedHeader("inputCountry", headerText, "h5");
             continue; 
@@ -425,7 +439,8 @@ document.getElementById("submitFormalityContext").addEventListener("click", func
     doCollapse(parent);
 });
 
-// generate final report  
+// generate final report 
+var reportOrder = ["Age","Gender","Race","Socioeconomic Class"]; 
 document.getElementById("finish").addEventListener("click", function(event) {
     utils.removeChildOfClass("reportBody", "row");
     var parent = event.target.parentElement;
@@ -454,32 +469,12 @@ document.getElementById("finish").addEventListener("click", function(event) {
 
     utils.populateReportItem("reportBody", "Data Source", d.data_source); 
 
-    // if (d.lang[0].length == 4) {
-    //     var val_div = utils.populateReportBias("reportBody", "Language", d.lang[0][3], d.lang[0][1], d.lang[0][2]);
-    //     if (d.lang.length > 1) {
-    //         var val = document.createElement("p");
-    //         if (d.lang.slice(1).length > 1) {
-    //             val.innerText = d.lang.slice(1).join(", ");
-    //         } else {
-    //             val.innerText = d.lang.slice(1);
-    //         }
-    //         val_div.appendChild(val);
-    //     }
-    // } else {
-    //     utils.populateReportItem("reportBody", "Language", d.lang);
-    // }
-
-    utils.populateReportItem("reportBody", "Dialect", d.dialect);  
-    // utils.populateReportItem("reportBody", "Country", d.country_arr);
-    utils.populateReportItem("reportBody", "Formality", d.formality);
-    utils.populateReportItem("reportBody", "Context", d.context);
-
     var sourceBiasKeys = Object.keys(d.bias_from_source);
-    if (d.bias_from_source != null) { 
-        for (var i=0; i<baseBiasList.length; i++) {
-            if (sourceBiasKeys.includes(baseBiasList[i])) {
-                utils.populateReportBias("reportBody", baseBiasList[i], d.bias_from_source[baseBiasList[i]]);
-            }
+    for (var i=0; i<reportOrder.length; i++) {
+        if (d.bias_from_source != null && sourceBiasKeys.includes(reportOrder[i])) { 
+            utils.populateReportBias("reportBody", reportOrder[i], d.bias_from_source[reportOrder[i]]);
+        } else {
+            utils.populateReportItem("reportBody", reportOrder[i], "unknown");
         }
     }
     for (var i=0; i<sourceBiasKeys.length; i++) {
@@ -488,6 +483,26 @@ document.getElementById("finish").addEventListener("click", function(event) {
         }
     }
 
+    var langList = Object.keys(d.lang);
+    if (sourceBiasKeys.includes("Language")) { 
+        var val_div = utils.populateReportBias("reportBody", "Language", d.bias_from_source["Language"]);
+        if (langList.length > 1) {
+            var val = document.createElement("p");
+            if (langList.slice(1).length > 1) {
+                val.innerText = langList.slice(1).join(", ");
+            } else {
+                val.innerText = langList.slice(1);
+            }
+            val_div.appendChild(val);
+        }
+    } else { 
+        utils.populateReportItem("reportBody", "Language", langList);
+    }
+
+    utils.populateReportItem("reportBody", "Dialect", d.dialect);  
+    utils.populateReportItem("reportBody", "Country", d.country_arr);
+    utils.populateReportItem("reportBody", "Formality", d.formality);
+    utils.populateReportItem("reportBody", "Context", d.context);
     utils.populateReportItem("reportBody", "Timestamps", utils.dateRangeStr(d.timestamp_start, d.timestamp_start_est, d.timestamp_end, d.timestamp_end_est));
     utils.populateReportItem("reportBody", "Collected", utils.dateRangeStr(d.collect_start, d.collect_start_est, d.collect_end, d.collect_end_est));
 

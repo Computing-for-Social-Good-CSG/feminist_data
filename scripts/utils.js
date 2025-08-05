@@ -141,19 +141,18 @@ export function populateCiteGroup(containerId, biasArr, inputName){
     return(knownBiases);
 }
 
-// creates "other" text entry option 
-export function inputOtherFactory(containerId, inputId, inputName, otherCounter) {
+// creates "other" text entry option
+export function inputOtherFactory(containerId, inputId, inputName, otherCounter) { 
     var container = document.getElementById(containerId);
     var entryDiv = document.createElement("div");
     var useId = inputId;
-
     if (otherCounter) {
         useId = inputId + otherCounter;
     } 
-
     entryDiv.id = useId + "_div";
+    container.appendChild(entryDiv);
 
-    var formCheck = inputFactory(containerId, useId, "checkbox", inputName);
+    var formCheck = inputFactory(entryDiv.id, useId, "checkbox", inputName);
     formCheck.classList.add("text-entry-holder");
     if (!otherCounter) {
         formCheck.querySelector("label").innerText = useId + ":";
@@ -165,16 +164,28 @@ export function inputOtherFactory(containerId, inputId, inputName, otherCounter)
     textEntry.setAttribute("type", "text");
     formCheck.appendChild(textEntry);
 
+    return(entryDiv);
+}
+
+export function inputOtherCite(containerId, inputId, inputName, otherCounter) {
+    var entryDiv = inputOtherFactory(containerId, inputId, inputName, otherCounter);
+    
+    var useId = inputId;
+    if (otherCounter) {
+        useId = inputId + otherCounter;
+    } 
+    entryDiv.id = useId + "_div";
+    
     var formGroup = document.createElement("div");
     formGroup.classList.add("form-group");
     formGroup.classList.add("text-entry-holder");
     entryDiv.appendChild(formGroup);
-    
+
     var citeLabel = document.createElement("label");
     citeLabel.setAttribute("for", useId + "Cite");
     citeLabel.innerText = "Citation:";
     formGroup.appendChild(citeLabel);
-
+    
     var citeInput = document.createElement("input");
     citeInput.id = useId + "Cite";
     citeInput.type = "text";
@@ -194,13 +205,11 @@ export function inputOtherFactory(containerId, inputId, inputName, otherCounter)
     linkInput.id = useId + "Link";
     linkInput.type = "text";
     formGroup2.appendChild(linkInput);
-
-    container.appendChild(entryDiv);
 }
 
 export function populateOtherGroup(containerId, titleList, inputName) {
     for (var i=0; i<titleList.length; i++) {
-        inputOtherFactory(containerId, titleList[i], inputName);
+        inputOtherCite(containerId, titleList[i], inputName);
     }
 }
 
@@ -267,6 +276,8 @@ export function removeChildOfClass(containerId, childClass) {
     }
 }
 
+
+
 // generate an item in final report 
 export function populateReportItem(containerId, itemName, itemValue) {
     var container = document.getElementById(containerId);
@@ -288,12 +299,14 @@ export function populateReportItem(containerId, itemName, itemValue) {
     val_div.classList.add("report-value");
     r.appendChild(val_div);
     var val = document.createElement("p");
-    if (Array.isArray(itemValue) & itemValue.length > 1) {
-        val.innerText = itemValue.join(", ");
-    } else if (itemValue.length == 0) {
-        val.innerText = "none";
-    } else {
-        val.innerText = itemValue;
+
+    val.innerText = itemValue;
+    if (Array.isArray(itemValue)) { 
+        if (itemValue.length > 1) {
+            val.innerText = itemValue.join(", ");
+        } else if (itemValue.length == 0) {
+            val.innerText = "unknown";
+        }
     }
     val_div.appendChild(val);
 
@@ -311,7 +324,8 @@ export function populateReportBias(containerId, itemName, item) {
             link.setAttribute("href", item[3]);
             link.classList.add("cite-link");
             val_div.appendChild(link);
-        } 
+        }
+        return(val_div); 
     }
 }
 
