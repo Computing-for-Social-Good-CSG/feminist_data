@@ -459,13 +459,13 @@ document.getElementById("finish").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
    
     // requires all dates filled
-    // var dates = parent.querySelectorAll(`[type*="date"]`);
-    // for (var i = 0; i < dates.length; i++) {
-    //     if(dates[i].value == "") {
-    //         console.log("Empty date, taking no action");
-    //         return false;
-    //     }
-    // }
+    var dates = parent.querySelectorAll(`[type*="date"]`);
+    for (var i = 0; i < dates.length; i++) {
+        if(dates[i].value == "") {
+            console.log("Empty date, taking no action");
+            return false;
+        }
+    }
 
     if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
        d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);

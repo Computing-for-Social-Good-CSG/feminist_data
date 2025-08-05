@@ -1,4 +1,4 @@
-# Data Feminism Bias Reporting Tool Repository
+# Data Feminism Bias Reporting Prototype
 
 [[Read the Paper](https://dl.acm.org/doi/10.1145/3715275.3732119)] [[Use the Bias Reporting Tool](https://computing-for-social-good-csg.github.io/feminist_data/)]
 
@@ -34,7 +34,9 @@ If you have another data source bias, dialect bias, or ethical consideration, yo
     booktitle = "The 2025 ACM Conference on Fairness, Accountability, and Transparency",
     month = jun,
     year = 2025,
-    publisher = "ACM"
+    publisher = "ACM",
+    pages = "1769--1792"
+    url = "https://dl.acm.org/doi/10.1145/3715275.3732119"
 }
 ```
 ## Other paradigms 
