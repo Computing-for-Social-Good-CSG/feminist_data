@@ -343,9 +343,15 @@ document.getElementById("submitDialect").addEventListener("click", function(even
             }  
         }
     }
-
     doCollapse(parent);
 });
+
+// add "Other" Country on click 
+var countryOtherCounter = 0;
+document.getElementById("countryAddOther").addEventListener("click", function() {
+    countryOtherCounter++;
+    utils.inputOtherFactory("inputCountry", "Other", "countries", countryOtherCounter);
+})
 
 // when Countries are submitted, populate Context and Formality 
 document.getElementById("submitCountry").addEventListener("click", function(event){
@@ -356,6 +362,13 @@ document.getElementById("submitCountry").addEventListener("click", function(even
     var parent = event.target.parentElement;
     var countryNodes = parent.querySelectorAll(`[name*="countries"]:checked`);
     d.country_arr = Array.from(countryNodes).map(checkbox => checkbox.value);
+
+    // check for user-created countries 
+    for (var i=0; i<d.country_arr.length; i++) {
+        if(d.country_arr[i].includes("Other")) {
+            d.country_arr[i] = document.getElementById(d.country_arr[i] + "Entry").value;
+        }
+    } 
 
     var suggestForm = [];
     var suggestFormFrom = []; 
