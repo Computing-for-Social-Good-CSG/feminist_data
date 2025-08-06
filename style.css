@@ -48,7 +48,7 @@ input[type="text"] {
 /* Final Report */
 #reportContainer {
 	margin-top: 30px;
-	margin-bottom: 50px;
+	margin-bottom: 15px;
 	border-top: 1px solid #dee2e6;
 	border-right: 1px solid #dee2e6;
 	border-left: 1px solid #dee2e6;
@@ -90,4 +90,7 @@ input[type="text"] {
 }
 .report-value a {
 	padding-left: 6px;
+}
+#exportPDF { 
+	margin-bottom: 50px;
 }

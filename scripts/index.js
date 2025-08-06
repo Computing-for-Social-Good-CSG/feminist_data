@@ -8,8 +8,7 @@ const baseFormalityList = ["Honorific", "Formal", "Vernacular", "Informal/Slang"
 const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken (conversational)", "Social Media"];
  
 var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
-// var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
-var dataSourceArr = utils.pullData("Data Sources", "../data/data_sources.json");
+var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 
 class Dataset {
     constructor () {
@@ -520,4 +519,15 @@ document.getElementById("finish").addEventListener("click", function(event) {
     utils.populateReportItem("reportBody", "Collected", utils.dateRangeStr(d.collect_start, d.collect_start_est, d.collect_end, d.collect_end_est));
 
     doCollapse(parent);
+});
+
+document.getElementById("exportPDF").addEventListener("click", function(event) {
+    var report = document.getElementById("reportContainer");
+    var opt = {
+        margin: 1,
+        filename: "Dataset Bias Report.pdf",
+        html2canvas: { scale: 2 },
+        jsPDF:{ unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(report).save();
 });
