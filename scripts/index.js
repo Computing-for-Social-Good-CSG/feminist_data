@@ -459,13 +459,13 @@ document.getElementById("finish").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
    
     // requires all dates filled
-    var dates = parent.querySelectorAll(`[type*="date"]`);
-    for (var i = 0; i < dates.length; i++) {
-        if(dates[i].value == "") {
-            console.log("Empty date, taking no action");
-            return false;
-        }
-    }
+    // var dates = parent.querySelectorAll(`[type*="date"]`);
+    // for (var i = 0; i < dates.length; i++) {
+    //     if(dates[i].value == "") {
+    //         console.log("Empty date, taking no action");
+    //         return false;
+    //     }
+    // }
 
     if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
        d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);
@@ -520,4 +520,15 @@ document.getElementById("finish").addEventListener("click", function(event) {
     utils.populateReportItem("reportBody", "Collected", utils.dateRangeStr(d.collect_start, d.collect_start_est, d.collect_end, d.collect_end_est));
 
     doCollapse(parent);
+});
+
+document.getElementById("exportPDF").addEventListener("click", function(event) {
+    var report = document.getElementById("reportContainer");
+    var opt = {
+        margin: 1,
+        filename: "Dataset Bias Report.pdf",
+        html2canvas: { scale: 2 },
+        jsPDF:{ unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(report).save();
 });
