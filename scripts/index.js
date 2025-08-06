@@ -8,8 +8,7 @@ const baseFormalityList = ["Honorific", "Formal", "Vernacular", "Informal/Slang"
 const baseContextList = ["Academia", "Education", "Encyclopedia", "Historical", "Law", "Literature", "News", "Religious", "Spoken (conversational)", "Social Media"];
  
 var langArr = utils.pullData("Languages", "https://computing-for-social-good-csg.github.io/feminist_data/data/languages.json");
-// var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
-var dataSourceArr = utils.pullData("Data Sources", "../data/data_sources.json");
+var dataSourceArr = utils.pullData("Data Sources", "https://computing-for-social-good-csg.github.io/feminist_data/data/data_sources.json");
 
 class Dataset {
     constructor () {
@@ -459,13 +458,13 @@ document.getElementById("finish").addEventListener("click", function(event) {
     var parent = event.target.parentElement;
    
     // requires all dates filled
-    // var dates = parent.querySelectorAll(`[type*="date"]`);
-    // for (var i = 0; i < dates.length; i++) {
-    //     if(dates[i].value == "") {
-    //         console.log("Empty date, taking no action");
-    //         return false;
-    //     }
-    // }
+    var dates = parent.querySelectorAll(`[type*="date"]`);
+    for (var i = 0; i < dates.length; i++) {
+        if(dates[i].value == "") {
+            console.log("Empty date, taking no action");
+            return false;
+        }
+    }
 
     if(d.set('timestamp_start', document.getElementById('startTimestamp').value)) {
        d.set('timestamp_start_est', document.getElementById('startTimestampEst').checked);

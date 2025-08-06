@@ -62,15 +62,24 @@
     "Web scraping (other than Common Crawl)":{},
     "Wikipedia":{
       "Biases":{
-        "Gender":"67% male", 
-        "gender_cite":"",
-        "gender_link":"",
-        "Age":"young",
-        "age_cite":"",
-        "age_link":"",
-        "Country":"USA",
-        "country_cite":"",
-        "country_link":""
+        "Age":[
+          "Moderately proportional",
+          "Moderately resembles UN global age estimates",
+          "WikiMedia Community Insights Report 2024",
+          "https://meta.wikimedia.org/wiki/Community_Insights/Community_Insights_2024_Report#Age"
+        ],
+        "Country":[
+          "Western-Centric",
+          "20% USA, 30% or higher EU",
+          "Wikipedia Editor Study: Results From the Editor Survey, April 2011",
+          "https://upload.wikimedia.org/wikipedia/commons/7/76/Editor_Survey_Report_-_April_2011.pdf"
+        ],
+        "Gender":[
+          "Male",
+          "81% Male",
+          "WikiMedia Community Insights Report 2024",
+          "https://meta.wikimedia.org/wiki/Community_Insights/Community_Insights_2024_Report#Gender"
+        ]
       },
       "Context":["Encyclopedia"],
       "Formality":["Formal"]
